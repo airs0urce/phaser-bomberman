@@ -19,8 +19,12 @@ export default class Level  {
         this.bombs = scene.add.group();
     }
 
-    static loadMap(scene, mapName, mapPath) {
-        scene.load.tilemapTiledJSON(mapName, mapPath);
+
+    static preload(scene) {
+        scene.load.audio('titleTrack', ['src/assets/audio/all/3 - Track 3.mp3']);
+        scene.load.atlas('atlas', 'src/assets/images/atlas.png', 'src/assets/images/atlas.json');
+
+        scene.load.tilemapTiledJSON("map1", "src/maps/map2.json");
     }
 
     addPlayer() {

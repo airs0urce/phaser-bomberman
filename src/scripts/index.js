@@ -12,6 +12,9 @@ var config = {
     pixelArt: true,
     zoom: 2.6,
     backgroundColor: "#000",
+    input: {
+        gamepad: true
+    },
     physics: {
         default: 'arcade',
         arcade: {

@@ -1,12 +1,15 @@
 import config from '../config';
+import Bomb from './Bomb';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     static #animsLoaded = false;
     tile = null;
     speed = 70;
+    keyADownLastState = false;
+    explodeTilesAround = 3;
 
     constructor(level, x, y) {
-        super(level.scene, x, y, 'objects', 'man-blue-move-down.png');
+        super(level.scene, x, y, 'atlas', 'man-blue-move-down.png');
 
         this.level = level;
         this.scene = level.scene;
@@ -22,41 +25,64 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         this._addAnims();
 
-        this.cursors = this.scene.input.keyboard.createCursorKeys();
-        this.keyA = this.scene.input.keyboard.addKey('A');
+        
 
     }
 
-    update() {
+    static preload(scene) {
+        
+    }
+
+    update(inputs) {
+
+        const pressed = {up: false, down: false, left: false, right: false};
+        pressed.up = this.scene.inputs.cursors.up.isDown;
+        pressed.down = this.scene.inputs.cursors.down.isDown;
+        pressed.left = this.scene.inputs.cursors.left.isDown;
+        pressed.right = this.scene.inputs.cursors.right.isDown;
+        pressed.placeBomb = this.scene.inputs.keyA.isDown;
+        if (this.scene.inputs.gamepad.total != 0) {
+            const pad = this.scene.inputs.gamepad.getPad(0);
+            if (! pressed.up) pressed.up = pad.up;
+            if (! pressed.down) pressed.down = pad.down;
+            if (! pressed.left) pressed.left = pad.left;
+            if (! pressed.right) pressed.right = pad.right;
+            if (! pressed.placeBomb) pressed.placeBomb = pad.A;
+        }
+
+        this.pressed = pressed;
+
         this._updateTile();
         this._updateMovements();
         this._updateCollisionSliding();
+        this._updateAddBomb();
     }
 
     _updateMovements() {
+
         // Stop any previous movement from the last frame
         this.body.setVelocity(0);
 
         // Movement
-        if (this.cursors.left.isDown && this.getData('blockMovement') !== 'left') {
+        if (this.pressed.left && this.getData('blockMovement') !== 'left') {
             this.body.setVelocityX(-this.speed);
-        } else if (this.cursors.right.isDown && this.getData('blockMovement') !== 'right') {
+        } else if (this.pressed.right && this.getData('blockMovement') !== 'right') {
             this.body.setVelocityX(this.speed);
-        } else if (this.cursors.up.isDown && this.getData('blockMovement') !== 'up') {
+        } else if (this.pressed.up && this.getData('blockMovement') !== 'up') {
             this.body.setVelocityY(-this.speed);
-        } else if (this.cursors.down.isDown && this.getData('blockMovement') !== 'down') {
+        } else if (this.pressed.down && this.getData('blockMovement') !== 'down') {
             this.body.setVelocityY(this.speed);
         }
         this.setData('blockMovement', null);
 
         // Movement animations
-        if (this.cursors.left.isDown) {
+        if (this.pressed.left) {
             this.anims.play("man-blue-left-walk", true);
-        } else if (this.cursors.right.isDown) {
+        } else if (this.pressed.right) {
             this.anims.play("man-blue-right-walk", true);
-        } else if (this.cursors.up.isDown) {
+        } else if (this.pressed.up) {
             this.anims.play("man-blue-up-walk", true);
-        } else if (this.cursors.down.isDown) {
+        } else if (this.pressed.down) {
             this.anims.play("man-blue-down-walk", true);
         } else {
             if (this.anims.currentAnim) {
@@ -68,7 +94,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     _updateCollisionSliding() {
         // collision sliding
-        if (this.cursors.right.isDown && this.body.blocked.right) {
+        if (this.pressed.right && this.body.blocked.right) {
             const upRightTile = this.level.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y);
             const downRightTile = this.level.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y + config.tileSize - 1);
 
@@ -81,7 +107,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             }
 
         }
-        if (this.cursors.left.isDown && this.body.blocked.left) {
+        if (this.pressed.left && this.body.blocked.left) {
             const upLeftTile = this.level.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y);
             const downLeftTile = this.level.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y + config.tileSize - 1);
             
@@ -93,7 +119,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 }
             }
         }
-        if (this.cursors.up.isDown && this.body.blocked.up) {
+        if (this.pressed.up && this.body.blocked.up) {
 
             const upLeftTile = this.level.groundLayer.getTileAtWorldXY(this.body.x, this.body.y - 1);
             const upRightTile = this.level.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y - 1);
@@ -106,7 +132,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 }
             }
         }
-        if (this.cursors.down.isDown && this.body.blocked.down) {
+        if (this.pressed.down && this.body.blocked.down) {
             const downLeftTile = this.level.groundLayer.getTileAtWorldXY(this.body.x, this.body.y + config.tileSize + 1);
             const downRightTile = this.level.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y + config.tileSize + 1);
 
@@ -121,10 +147,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     _updateTile() {
-        if (this.cursors.left.isDown 
-            || this.cursors.right.isDown 
-            || this.cursors.up.isDown 
-            || this.cursors.down.isDown
+        if (this.pressed.left 
+            || this.pressed.right
+            || this.pressed.up
+            || this.pressed.down
         ) {
             // update tile under player
             const tile = this.level.groundLayer.getTileAtWorldXY(
@@ -133,6 +159,30 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             );
             this.setData('tile', tile);
         }
+    }
+
+    _updateAddBomb() {
+        const tileUnderPlayer = this.getTile();
+        
+        // don't add bombs to other tiles when player moves with pressed A
+        if (! this.pressed.placeBomb || this.keyADownLastState == this.pressed.placeBomb) {
+            return;
+        }
+
+        // don't add bomb if there is alredy one
+        if (tileUnderPlayer.getData('bomb')) {
+            return;
+        }
+
+        // add a bomb
+        const bomb = new Bomb(
+            this,
+            tileUnderPlayer.pixelX + config.tileSize/2,
+            tileUnderPlayer.pixelY + config.tileSize/2,
+            this.level
+        );
+
+        this.keyADownLastState = this.pressed.placeBomb;
     }
 
     getTile() {
@@ -152,10 +202,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             anims.create({
                 key: "man-blue-left-walk",
                 frames: [
-                    {key: 'objects', frame: 'man-blue-move-left.png'},
-                    {key: 'objects', frame: 'man-blue-move-left-anim-1.png'},
-                    {key: 'objects', frame: 'man-blue-move-left.png'},
-                    {key: 'objects', frame: 'man-blue-move-left-anim-2.png'},
+                    {key: 'atlas', frame: 'man-blue-move-left.png'},
+                    {key: 'atlas', frame: 'man-blue-move-left-anim-1.png'},
+                    {key: 'atlas', frame: 'man-blue-move-left.png'},
+                    {key: 'atlas', frame: 'man-blue-move-left-anim-2.png'},
                 ],
                 frameRate: 8,
                 repeat: -1,
@@ -166,10 +216,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         anims.create({
             key: "man-blue-right-walk",
             frames: [
-                {key: 'objects', frame: 'man-blue-move-right.png'},
-                {key: 'objects', frame: 'man-blue-move-right-anim-1.png'},
-                {key: 'objects', frame: 'man-blue-move-right.png'},
-                {key: 'objects', frame: 'man-blue-move-right-anim-2.png'},
+                {key: 'atlas', frame: 'man-blue-move-right.png'},
+                {key: 'atlas', frame: 'man-blue-move-right-anim-1.png'},
+                {key: 'atlas', frame: 'man-blue-move-right.png'},
+                {key: 'atlas', frame: 'man-blue-move-right-anim-2.png'},
             ],
             frameRate: 8,
             repeat: -1
@@ -177,10 +227,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         anims.create({
             key: "man-blue-up-walk",
             frames: [
-                {key: 'objects', frame: 'man-blue-move-up.png'},
-                {key: 'objects', frame: 'man-blue-move-up-anim-1.png'},
-                {key: 'objects', frame: 'man-blue-move-up.png'},
-                {key: 'objects', frame: 'man-blue-move-up-anim-2.png'},
+                {key: 'atlas', frame: 'man-blue-move-up.png'},
+                {key: 'atlas', frame: 'man-blue-move-up-anim-1.png'},
+                {key: 'atlas', frame: 'man-blue-move-up.png'},
+                {key: 'atlas', frame: 'man-blue-move-up-anim-2.png'},
             ],
             frameRate: 8,
             repeat: -1
@@ -188,10 +238,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         anims.create({
             key: "man-blue-down-walk",
             frames: [
-                {key: 'objects', frame: 'man-blue-move-down.png'},
-                {key: 'objects', frame: 'man-blue-move-down-anim-1.png'},
-                {key: 'objects', frame: 'man-blue-move-down.png'},
-                {key: 'objects', frame: 'man-blue-move-down-anim-2.png'},
+                {key: 'atlas', frame: 'man-blue-move-down.png'},
+                {key: 'atlas', frame: 'man-blue-move-down-anim-1.png'},
+                {key: 'atlas', frame: 'man-blue-move-down.png'},
+                {key: 'atlas', frame: 'man-blue-move-down-anim-2.png'},
             ],
             frameRate: 8,
             repeat: -1
