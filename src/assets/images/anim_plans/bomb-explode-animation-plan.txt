@@ -1,0 +1,8 @@
+explode-1-center.png / explode-1-line.png / explode-1-tail.png
+explode-2-center.png / explode-2-line.png / explode-2-tail.png
+explode-3-center.png / explode-3-line.png / explode-3-tail.png
+explode-4-center.png / explode-4-line.png / explode-4-tail.png
+explode-3-center.png / explode-3-line.png / explode-3-tail.png
+explode-2-center.png / explode-2-line.png / explode-2-tail.png
+explode-1-center.png / explode-1-line.png / explode-1-tail.png
+empty

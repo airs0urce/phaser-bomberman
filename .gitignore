@@ -1,0 +1,13 @@
+logs/*
+logs/worker*
+node_modules/
+.idea/
+bin/isolate*
+.vscode/
+files/uploads/
+/mongo-connector.json
+.DS_Store
+#Vim temporary files
+.*.swp
+/tags
+files/locks/

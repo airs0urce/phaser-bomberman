@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.4" orientation="orthogonal" renderorder="right-down" width="15" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="11">
+ <editorsettings>
+  <export target="map1.json" format="json"/>
+ </editorsettings>
+ <tileset firstgid="1" name="tileset-ground" tilewidth="16" tileheight="16" tilecount="16" columns="4">
+  <image source="../assets/images/ground.png" width="64" height="64"/>
+  <tile id="0" type="brick">
+   <properties>
+    <property name="collides" type="bool" value="true"/>
+    <property name="destructible" type="bool" value="true"/>
+    <property name="name" value="bricks"/>
+   </properties>
+  </tile>
+  <tile id="1" type="ground">
+   <properties>
+    <property name="collides" type="bool" value="false"/>
+    <property name="destructible" type="bool" value="false"/>
+    <property name="name" value="ground"/>
+   </properties>
+  </tile>
+  <tile id="2" type="wall">
+   <properties>
+    <property name="collides" type="bool" value="true"/>
+    <property name="destructible" type="bool" value="false"/>
+    <property name="name" value="wall"/>
+   </properties>
+  </tile>
+  <tile id="3" type="brick">
+   <properties>
+    <property name="collides" type="bool" value="true"/>
+    <property name="destructible" type="bool" value="true"/>
+    <property name="name" value="bricks"/>
+   </properties>
+  </tile>
+  <tile id="4" type="ground">
+   <properties>
+    <property name="collides" type="bool" value="false"/>
+    <property name="destructible" type="bool" value="false"/>
+    <property name="name" value="ground"/>
+   </properties>
+  </tile>
+  <tile id="5" type="wall">
+   <properties>
+    <property name="collides" type="bool" value="true"/>
+    <property name="destructible" type="bool" value="false"/>
+    <property name="name" value="wall"/>
+   </properties>
+  </tile>
+  <tile id="6" type="brick">
+   <properties>
+    <property name="collides" type="bool" value="true"/>
+    <property name="destructible" type="bool" value="true"/>
+    <property name="name" value="bricks"/>
+   </properties>
+  </tile>
+  <tile id="7" type="ground">
+   <properties>
+    <property name="collides" type="bool" value="false"/>
+    <property name="destructible" type="bool" value="false"/>
+    <property name="name" value="ground"/>
+   </properties>
+  </tile>
+  <tile id="8" type="wall">
+   <properties>
+    <property name="collides" type="bool" value="true"/>
+    <property name="destructible" type="bool" value="false"/>
+    <property name="name" value="wall"/>
+   </properties>
+  </tile>
+  <tile id="9" type="brick">
+   <properties>
+    <property name="collides" type="bool" value="true"/>
+    <property name="destructible" type="bool" value="true"/>
+    <property name="name" value="bricks"/>
+   </properties>
+  </tile>
+  <tile id="10" type="ground">
+   <properties>
+    <property name="collides" type="bool" value="false"/>
+    <property name="destructible" type="bool" value="false"/>
+    <property name="name" value="ground"/>
+   </properties>
+  </tile>
+  <tile id="11" type="wall">
+   <properties>
+    <property name="collides" type="bool" value="true"/>
+    <property name="destructible" type="bool" value="false"/>
+    <property name="name" value="wall"/>
+   </properties>
+  </tile>
+  <tile id="12" type="gate">
+   <properties>
+    <property name="collides" type="bool" value="false"/>
+    <property name="destructible" type="bool" value="false"/>
+    <property name="name" value="finish"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="collides" type="bool" value="false"/>
+    <property name="destructible" type="bool" value="true"/>
+    <property name="name" value="bonus-bomb-powerup"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="collides" type="bool" value="false"/>
+    <property name="destructible" type="bool" value="true"/>
+    <property name="name" value="bonus-bomb-count"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="collides" type="bool" value="false"/>
+    <property name="destructible" type="bool" value="true"/>
+    <property name="name" value="bonus-dollar"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer id="3" name="ground" width="15" height="13">
+  <data encoding="base64">
+   AwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAUAAAAFAAAABQAAAAQAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABAAAAAUAAAADAAAAAwAAAAUAAAAGAAAABQAAAAYAAAAEAAAABgAAAAUAAAAGAAAABQAAAAYAAAAEAAAABgAAAAQAAAADAAAAAwAAAAQAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAQAAAAEAAAABAAAAAUAAAADAAAAAwAAAAUAAAAGAAAABQAAAAYAAAAFAAAABgAAAAUAAAAGAAAABQAAAAYAAAAFAAAABgAAAAUAAAADAAAAAwAAAAQAAAAFAAAABQAAAAQAAAAFAAAABAAAAAQAAAAFAAAABAAAAAUAAAAFAAAABQAAAAUAAAADAAAAAwAAAAUAAAAGAAAABQAAAAYAAAAFAAAABgAAAAUAAAAGAAAABQAAAAYAAAAEAAAABgAAAAUAAAADAAAAAwAAAAUAAAAEAAAABAAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAADAAAAAwAAAAUAAAAGAAAABQAAAAYAAAAFAAAABgAAAAUAAAAGAAAABAAAAAYAAAAFAAAABgAAAAUAAAADAAAAAwAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAQAAAAEAAAABAAAAAUAAAAFAAAABQAAAAUAAAADAAAAAwAAAAUAAAAGAAAABQAAAAYAAAAFAAAABgAAAAUAAAAGAAAABAAAAAYAAAAFAAAABgAAAAUAAAADAAAAAwAAAAUAAAAFAAAABAAAAAUAAAAEAAAABQAAAAUAAAAFAAAABQAAAAUAAAAFAAAABQAAAAUAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAA
+  </data>
+ </layer>
+ <objectgroup id="2" name="objects">
+  <object id="7" name="player1" type="player" x="16.2131" y="15.0601" width="16" height="16">
+   <properties>
+    <property name="character" value="blue"/>
+   </properties>
+  </object>
+  <object id="10" name="player2" type="player" x="208.07" y="176.005" width="16" height="16">
+   <properties>
+    <property name="character" value="red"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
