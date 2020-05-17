@@ -22,7 +22,7 @@ var config = {
             debug: false
         }
     },
-    scene: [WelcomeScene, Map1Scene]
+    scene: [WelcomeScene, Map1Scene],
 };
 
 const game = new Phaser.Game(config);

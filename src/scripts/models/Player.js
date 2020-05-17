@@ -6,7 +6,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     tile = null;
     speed = 70;
     keyADownLastState = false;
-    explodeTilesAround = 3;
+    explodeTilesAround = 2;
+    level = null;
+    scene = null;
+
+    tileInitialized = false;
 
     constructor(level, x, y) {
         super(level.scene, x, y, 'atlas', 'man-blue-move-down.png');
@@ -24,32 +28,29 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.setDepth(10);
 
         this._addAnims();
-
-        
-
     }
 
     static preload(scene) {
         
     }
 
-    update(inputs) {
+    update() {
+        const inputs = this.scene.inputs;
 
-        const pressed = {up: false, down: false, left: false, right: false};
-        pressed.up = this.scene.inputs.cursors.up.isDown;
-        pressed.down = this.scene.inputs.cursors.down.isDown;
-        pressed.left = this.scene.inputs.cursors.left.isDown;
-        pressed.right = this.scene.inputs.cursors.right.isDown;
-        pressed.placeBomb = this.scene.inputs.keyA.isDown;
-        if (this.scene.inputs.gamepad.total != 0) {
-            const pad = this.scene.inputs.gamepad.getPad(0);
+        const pressed = {up: false, down: false, left: false, right: false, placeBomb: false};
+        pressed.up = inputs.cursors.up.isDown;
+        pressed.down = inputs.cursors.down.isDown;
+        pressed.left = inputs.cursors.left.isDown;
+        pressed.right = inputs.cursors.right.isDown;
+        pressed.placeBomb = inputs.keyA.isDown;
+        if (inputs.gamepad.total != 0) {
+            const pad = inputs.gamepad.getPad(0);
             if (! pressed.up) pressed.up = pad.up;
             if (! pressed.down) pressed.down = pad.down;
             if (! pressed.left) pressed.left = pad.left;
             if (! pressed.right) pressed.right = pad.right;
             if (! pressed.placeBomb) pressed.placeBomb = pad.A;
         }
-
         this.pressed = pressed;
 
         this._updateTile();
@@ -147,10 +148,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     _updateTile() {
+
         if (this.pressed.left 
             || this.pressed.right
             || this.pressed.up
             || this.pressed.down
+            || ! this.tileInitialized
         ) {
             // update tile under player
             const tile = this.level.groundLayer.getTileAtWorldXY(
@@ -158,6 +161,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 this.body.center.y
             );
             this.setData('tile', tile);
+            this.tileInitialized = true;
         }
     }
 
@@ -165,10 +169,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         const tileUnderPlayer = this.getTile();
         
         // don't add bombs to other tiles when player moves with pressed A
-        if (! this.pressed.placeBomb || this.keyADownLastState == this.pressed.placeBomb) {
+        if (this.keyADownLastState == this.pressed.placeBomb) {
+            return;
+        } else {
+            this.keyADownLastState = this.pressed.placeBomb;
+        }
+        if (! this.pressed.placeBomb) {
             return;
         }
-
+        
         // don't add bomb if there is alredy one
         if (tileUnderPlayer.getData('bomb')) {
             return;
@@ -179,10 +188,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             this,
             tileUnderPlayer.pixelX + config.tileSize/2,
             tileUnderPlayer.pixelY + config.tileSize/2,
-            this.level
         );
-
-        this.keyADownLastState = this.pressed.placeBomb;
     }
 
     getTile() {

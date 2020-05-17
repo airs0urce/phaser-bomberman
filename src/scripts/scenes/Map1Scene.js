@@ -10,6 +10,7 @@ const tileSize = 16;
 export class Map1Scene extends Phaser.Scene {
 
     inputs = {};
+    sounds = {};
 
     constructor() {
         super('Map1');
@@ -24,14 +25,21 @@ export class Map1Scene extends Phaser.Scene {
     }
 
     create() {
-        this.inputs.cursors = this.input.keyboard.createCursorKeys();
-        this.inputs.keyA = this.input.keyboard.addKey('A');
-        this.inputs.gamepad = this.input.gamepad;
 
         this.sound.pauseOnBlur = false;
-        // this.sound.add('titleTrack').play({loop: true});
-        this.audioBombExplode = this.sound.add('bomb-explode');
 
+        this.inputs = {
+            cursors: this.input.keyboard.createCursorKeys(),
+            keyA: this.input.keyboard.addKey('A'),
+            gamepad: this.input.gamepad
+        }
+
+        // this.sound.add('titleTrack').play({loop: true});
+        this.sounds = {
+            'bombExplode': this.sound.add('bomb-explode')
+        }
+
+        
         this.level = new Level(this, 'map1');
         this.player = this.level.addPlayer();
 
