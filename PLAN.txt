@@ -1,0 +1,25 @@
+Tilemap
+
+
+  /**
+     * Puts a tile at the given tile coordinates in the specified layer. You can pass in either an index
+     * or a Tile object. If you pass in a Tile, all attributes will be copied over to the specified
+     * location. If you pass in an index, only the index at the specified location will be changed.
+     * Collision information will be recalculated at the specified location.
+     *
+     * If no layer specified, the maps current layer is used.
+     *
+     * This cannot be applied to StaticTilemapLayers.
+     *
+     * @method Phaser.Tilemaps.Tilemap#putTileAt
+     * @since 3.0.0
+     *
+     * @param {(integer|Phaser.Tilemaps.Tile)} tile - The index of this tile to set or a Tile object.
+     * @param {integer} tileX - The x coordinate, in tiles, not pixels.
+     * @param {integer} tileY - The y coordinate, in tiles, not pixels.
+     * @param {boolean} [recalculateFaces=true] - `true` if the faces data should be recalculated.
+     * @param {(string|integer|Phaser.Tilemaps.DynamicTilemapLayer|Phaser.Tilemaps.StaticTilemapLayer)} [layer] - The tile layer to use. If not given the current layer is used.
+     *
+     * @return {?Phaser.Tilemaps.Tile} Returns a Tile, or null if the layer given was invalid or the coordinates were out of bounds.
+     */
+    putTileAt: function (tile, tileX, tileY, recalculateFaces, layer)

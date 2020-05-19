@@ -19,12 +19,19 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: {y: 0},
-            debug: false
+            // debug: true
         }
     },
     scene: [WelcomeScene, Map1Scene],
 };
 
 const game = new Phaser.Game(config);
+
+game.sound.volume = 0;
+// game.sound.volume = 1;
+
+
+
+
 
 

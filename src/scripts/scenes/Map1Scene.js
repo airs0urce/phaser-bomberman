@@ -19,9 +19,19 @@ export class Map1Scene extends Phaser.Scene {
     }
 
     preload() {
-        Player.preload(this);
-        Level.preload(this);
-        Bomb.preload(this);
+        // Level
+        this.load.audio('titleTrack', ['src/assets/audio/all/3 - Track 3.mp3']);
+        this.load.atlas('atlas', 'src/assets/images/atlas.png', 'src/assets/images/atlas.json');
+        this.load.tilemapTiledJSON("map3", "src/maps/map3.json");
+        
+
+        // Bomb
+        this.load.audio('bomb-explode', ['src/assets/audio/bomb-explode.mp3']);
+        this.load.audio('bomb-place', ['src/assets/audio/bomb-place.mp3']);
+
+        // PLayer
+        this.load.audio('player-die', ['src/assets/audio/player-die.mp3']);
+        
     }
 
     create() {
@@ -34,14 +44,23 @@ export class Map1Scene extends Phaser.Scene {
             gamepad: this.input.gamepad
         }
 
-        // this.sound.add('titleTrack').play({loop: true});
         this.sounds = {
-            'bombExplode': this.sound.add('bomb-explode')
+            titleTrack: this.sound.add('titleTrack'),
+            bombExplode: this.sound.add('bomb-explode'),
+            bombPlace: this.sound.add('bomb-place'),
+            playerDie: this.sound.add('player-die'),
         }
 
+        this.sounds.titleTrack.play({loop: true});
+
         
-        this.level = new Level(this, 'map1');
-        this.player = this.level.addPlayer();
+        this.level = new Level(this, 'map3');
+        this.players = this.add.group();
+
+
+
+        this.players.add(this.level.addPlayer(1, 2, 'red').setGamepadIndex(0));
+        this.players.add(this.level.addPlayer(11, 11, 'blue').setGamepadIndex(1));
 
         // const debugGraphics = this.add.graphics().setAlpha(0.75);
         //   this.level.groundLayer.renderDebug(debugGraphics, {tileColor: null,collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tilesfaceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
@@ -50,7 +69,9 @@ export class Map1Scene extends Phaser.Scene {
     }
 
     update(time, delta) {
-        this.player.update();
+        this.players.getChildren().forEach((player) => {
+            player.update();
+        })
     }
 
     

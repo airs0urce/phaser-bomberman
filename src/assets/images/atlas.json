@@ -684,20 +684,380 @@
 			"frame": {
 				"x": 677,
 				"y": 0,
-				"w": 21,
-				"h": 20
+				"w": 23,
+				"h": 23
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 21,
-				"h": 20
+				"w": 23,
+				"h": 23
 			},
 			"sourceSize": {
-				"w": 21,
-				"h": 20
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-die-2.png": {
+			"frame": {
+				"x": 700,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-die-3.png": {
+			"frame": {
+				"x": 723,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-die-4.png": {
+			"frame": {
+				"x": 746,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-die-5.png": {
+			"frame": {
+				"x": 769,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-die-6.png": {
+			"frame": {
+				"x": 792,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-die-7.png": {
+			"frame": {
+				"x": 815,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-down.png": {
+			"frame": {
+				"x": 838,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-down-anim-1.png": {
+			"frame": {
+				"x": 861,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-down-anim-2.png": {
+			"frame": {
+				"x": 884,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-left.png": {
+			"frame": {
+				"x": 907,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-left-anim-1.png": {
+			"frame": {
+				"x": 930,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-left-anim-2.png": {
+			"frame": {
+				"x": 953,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-right.png": {
+			"frame": {
+				"x": 976,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-right-anim-1.png": {
+			"frame": {
+				"x": 999,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-right-anim-2.png": {
+			"frame": {
+				"x": 1022,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-up.png": {
+			"frame": {
+				"x": 1045,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-up-anim-1.png": {
+			"frame": {
+				"x": 1068,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
+			}
+		},
+		"man-red-move-up-anim-2.png": {
+			"frame": {
+				"x": 1091,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 23,
+				"h": 23
+			},
+			"sourceSize": {
+				"w": 23,
+				"h": 23
 			}
 		}
 	},
@@ -707,7 +1067,7 @@
 		"image": "spritesheet.png",
 		"format": "RGBA8888",
 		"size": {
-			"w": 698,
+			"w": 1114,
 			"h": 23
 		},
 		"scale": "1"

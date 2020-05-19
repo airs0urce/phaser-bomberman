@@ -2,7 +2,10 @@ import config from '../config';
 
 export default class Bomb extends Phaser.Physics.Arcade.Sprite {
     static #animsLoaded = false;
+    static #explodeSoundPlaying = 0;
     explodeStarted = false;
+    static #safePlayerOverlapPx = 6;
+    
 
     constructor(player, x, y) {
         super(player.scene, x, y, 'atlas', 'bomb-pending-1.png');
@@ -25,13 +28,39 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         
         this.level.addBomb(this);
 
+        this.scene.sounds.bombPlace.play({delay: 0.05});
+
         this._addAnims();
         this.anims.play("bomb-pending", true);
         this.once('animationcomplete', this.explode);
+
+        this.fireGroup = this.scene.add.group();
     }
 
-    static preload(scene) {
-        scene.load.audio('bomb-explode', ['src/assets/audio/bomb-explode.mp3']);
+    _createExplodeFireSprite(x, y, dir) {
+        const sprite = this.scene.physics.add.sprite(x, y);
+        sprite.setOrigin(0.5);
+
+        const angle = {
+            'none': 0,
+            'top': -90,
+            'bottom': 90,
+            'left': 180,
+            'right': 0,
+        }[dir]
+        sprite.setAngle(angle);        
+        
+        const bodySize = {
+            width: config.tileSize - Bomb.#safePlayerOverlapPx*2, 
+            height: config.tileSize - Bomb.#safePlayerOverlapPx*2
+        };
+        sprite.body.setSize(bodySize.width, bodySize.height);
+        sprite.body.setOffset(
+            Bomb.#safePlayerOverlapPx, 
+            Bomb.#safePlayerOverlapPx
+        );
+
+        return sprite;   
     }
 
     explode() {
@@ -43,16 +72,26 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         const explodeTilesAround = this.player.explodeTilesAround;
         const explodeTileXY = {x: this.x, y: this.y};
 
-        this.scene.sounds.bombExplode.play();
         
+        if (Bomb.#explodeSoundPlaying >= 1) {
+            this.scene.sounds.bombExplode.play({seek: 0.3});
+        } else {
+            this.scene.sounds.bombExplode.play({seek: 0});
+        }
+        Bomb.#explodeSoundPlaying += 1;
+        this.scene.sounds.bombExplode.once('complete', () => {
+            Bomb.#explodeSoundPlaying--;
+        });
+        
+        const groundLayer = this.level.groundLayer;
 
         const explodeSprites = [];
         explodeSprites.push({
             dir: 'none',
-            sprite: this.scene.add.sprite(explodeTileXY.x, explodeTileXY.y),
+            sprite: this._createExplodeFireSprite(explodeTileXY.x, explodeTileXY.y, 'none'),
             anim: 'bomb-explode-center',
             angle: 0,
-            tile: this.level.groundLayer.getTileAtWorldXY(explodeTileXY.x, explodeTileXY.y)
+            tile: groundLayer.getTileAtWorldXY(explodeTileXY.x, explodeTileXY.y)
         });
 
                
@@ -83,10 +122,10 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                 },
             };
 
-            explodeXYs.top.tile = this.level.groundLayer.getTileAtWorldXY(explodeXYs.top.x, explodeXYs.top.y)
-            explodeXYs.bottom.tile = this.level.groundLayer.getTileAtWorldXY(explodeXYs.bottom.x, explodeXYs.bottom.y)
-            explodeXYs.left.tile = this.level.groundLayer.getTileAtWorldXY(explodeXYs.left.x, explodeXYs.left.y)
-            explodeXYs.right.tile = this.level.groundLayer.getTileAtWorldXY(explodeXYs.right.x, explodeXYs.right.y)
+            explodeXYs.top.tile = groundLayer.getTileAtWorldXY(explodeXYs.top.x, explodeXYs.top.y)
+            explodeXYs.bottom.tile = groundLayer.getTileAtWorldXY(explodeXYs.bottom.x, explodeXYs.bottom.y)
+            explodeXYs.left.tile = groundLayer.getTileAtWorldXY(explodeXYs.left.x, explodeXYs.left.y)
+            explodeXYs.right.tile = groundLayer.getTileAtWorldXY(explodeXYs.right.x, explodeXYs.right.y)
 
 
             const noExplodeTileNames = ['wall', 'bricks'];
@@ -100,7 +139,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                 explodeSprites.push({
                     // top
                     dir: 'top',
-                    sprite: this.scene.add.sprite(explodeXYs.top.x, explodeXYs.top.y).setAngle(-90),
+                    sprite: this._createExplodeFireSprite(explodeXYs.top.x, explodeXYs.top.y, 'top'),
                     anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
                     tile: explodeXYs.top.tile
                 });
@@ -119,7 +158,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                 explodeSprites.push({
                     // bottom
                     dir: 'bottom',
-                    sprite: this.scene.add.sprite(explodeXYs.bottom.x, explodeXYs.bottom.y).setAngle(90),
+                    sprite: this._createExplodeFireSprite(explodeXYs.bottom.x, explodeXYs.bottom.y, 'bottom'),
                     anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
                     tile: explodeXYs.bottom.tile
                 });
@@ -137,7 +176,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                 explodeSprites.push({
                     // left
                     dir: 'left',
-                    sprite: this.scene.add.sprite(explodeXYs.left.x, explodeXYs.left.y).setAngle(180),
+                    sprite: this._createExplodeFireSprite(explodeXYs.left.x, explodeXYs.left.y, 'left'),
                     anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
                     tile: explodeXYs.left.tile
                 });
@@ -156,7 +195,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                 explodeSprites.push({
                     // right
                     dir: 'right',
-                    sprite: this.scene.add.sprite(explodeXYs.right.x, explodeXYs.right.y).setAngle(0),
+                    sprite: this._createExplodeFireSprite(explodeXYs.right.x, explodeXYs.right.y, 'right'),
                     anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
                     tile: explodeXYs.right.tile
                 });
@@ -168,8 +207,12 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
-
-
+        for (let explodeSprite of explodeSprites) {            
+            this.fireGroup.add(explodeSprite.sprite);            
+        }
+        this.scene.physics.add.overlap(this.scene.players, this.fireGroup, (player, fireSprite) => {
+            player.die();
+        });
 
         // show explode fire animation on tiles
         let centerSprite = true;

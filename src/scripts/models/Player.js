@@ -4,19 +4,27 @@ import Bomb from './Bomb';
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     static #animsLoaded = false;
     tile = null;
-    speed = 70;
+    speed = 68;
     keyADownLastState = false;
     explodeTilesAround = 2;
     level = null;
     scene = null;
+    handleMovements = true;
 
     tileInitialized = false;
+    dieStarted = false;
 
-    constructor(level, x, y) {
-        super(level.scene, x, y, 'atlas', 'man-blue-move-down.png');
+    gamepadIndex = 0;
+    type = 'blue';
+
+    constructor(level, x, y, type = 'blue') {
+        super(level.scene, x, y, 'atlas', `man-${type}-move-down.png`);
+        this.type = type;
 
         this.level = level;
         this.scene = level.scene;
+
+        this.groundLayer = this.level.groundLayer;
 
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this)
@@ -30,11 +38,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this._addAnims();
     }
 
-    static preload(scene) {
-        
+    setGamepadIndex(index) {
+        this.gamepadIndex = index;
+        return this;
     }
 
     update() {
+        if (! this.active) {
+            return;
+        }
         const inputs = this.scene.inputs;
 
         const pressed = {up: false, down: false, left: false, right: false, placeBomb: false};
@@ -44,12 +56,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         pressed.right = inputs.cursors.right.isDown;
         pressed.placeBomb = inputs.keyA.isDown;
         if (inputs.gamepad.total != 0) {
-            const pad = inputs.gamepad.getPad(0);
-            if (! pressed.up) pressed.up = pad.up;
-            if (! pressed.down) pressed.down = pad.down;
-            if (! pressed.left) pressed.left = pad.left;
-            if (! pressed.right) pressed.right = pad.right;
-            if (! pressed.placeBomb) pressed.placeBomb = pad.A;
+            const pad = inputs.gamepad.getPad(this.gamepadIndex);
+            if (pad) {
+                if (! pressed.up) pressed.up = pad.up;
+                if (! pressed.down) pressed.down = pad.down;
+                if (! pressed.left) pressed.left = pad.left;
+                if (! pressed.right) pressed.right = pad.right;
+                if (! pressed.placeBomb) pressed.placeBomb = pad.A;
+            }
         }
         this.pressed = pressed;
 
@@ -59,8 +73,30 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this._updateAddBomb();
     }
 
-    _updateMovements() {
+    die() {
+        if (this.dieStarted) {
+            return;
+        }
+        this.dieStarted = true;
 
+        this.handleMovements = false;
+        this.scene.sounds.playerDie.play();
+        this.body.stop();
+        this.anims.play(`man-${this.type}-die`, true);
+        this.once(`animationcomplete-man-${this.type}-die`, (currentAnim, currentFrame, sprite) => {
+            sprite.destroy();
+        })
+
+    }
+
+    getTile() {
+        return this.getData('tile');
+    }
+
+    _updateMovements() {
+        if (! this.handleMovements) {
+            return;
+        }
         // Stop any previous movement from the last frame
         this.body.setVelocity(0);
 
@@ -78,13 +114,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Movement animations
         if (this.pressed.left) {
-            this.anims.play("man-blue-left-walk", true);
+            this.anims.play(`man-${this.type}-left-walk`, true);
         } else if (this.pressed.right) {
-            this.anims.play("man-blue-right-walk", true);
+            this.anims.play(`man-${this.type}-right-walk`, true);
         } else if (this.pressed.up) {
-            this.anims.play("man-blue-up-walk", true);
+            this.anims.play(`man-${this.type}-up-walk`, true);
         } else if (this.pressed.down) {
-            this.anims.play("man-blue-down-walk", true);
+            this.anims.play(`man-${this.type}-down-walk`, true);
         } else {
             if (this.anims.currentAnim) {
                 this.anims.setCurrentFrame(this.anims.currentAnim.frames[0]);
@@ -96,8 +132,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     _updateCollisionSliding() {
         // collision sliding
         if (this.pressed.right && this.body.blocked.right) {
-            const upRightTile = this.level.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y);
-            const downRightTile = this.level.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y + config.tileSize - 1);
+            const upRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y);
+            const downRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y + config.tileSize - 1);
 
             if (!upRightTile.getData('bomb') && !downRightTile.getData('bomb')) {
                 if (upRightTile && upRightTile.properties.name == 'ground') {
@@ -109,8 +145,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         }
         if (this.pressed.left && this.body.blocked.left) {
-            const upLeftTile = this.level.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y);
-            const downLeftTile = this.level.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y + config.tileSize - 1);
+            const upLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y);
+            const downLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y + config.tileSize - 1);
             
             if (!upLeftTile.getData('bomb') && !downLeftTile.getData('bomb')) {
                 if (upLeftTile && upLeftTile.properties.name == 'ground') {
@@ -122,8 +158,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         }
         if (this.pressed.up && this.body.blocked.up) {
 
-            const upLeftTile = this.level.groundLayer.getTileAtWorldXY(this.body.x, this.body.y - 1);
-            const upRightTile = this.level.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y - 1);
+            const upLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x, this.body.y - 1);
+            const upRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y - 1);
 
             if (!upLeftTile.getData('bomb') && !upRightTile.getData('bomb')) {
                 if (upLeftTile && upLeftTile.properties.name == 'ground') {
@@ -134,8 +170,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
         if (this.pressed.down && this.body.blocked.down) {
-            const downLeftTile = this.level.groundLayer.getTileAtWorldXY(this.body.x, this.body.y + config.tileSize + 1);
-            const downRightTile = this.level.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y + config.tileSize + 1);
+            const downLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x, this.body.y + config.tileSize + 1);
+            const downRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y + config.tileSize + 1);
 
             if (!downLeftTile.getData('bomb') && !downRightTile.getData('bomb')) {
                 if (downLeftTile && downLeftTile.properties.name == 'ground') {
@@ -156,7 +192,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             || ! this.tileInitialized
         ) {
             // update tile under player
-            const tile = this.level.groundLayer.getTileAtWorldXY(
+            const tile = this.groundLayer.getTileAtWorldXY(
                 this.body.center.x, 
                 this.body.center.y
             );
@@ -166,7 +202,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     _updateAddBomb() {
-        const tileUnderPlayer = this.getTile();
         
         // don't add bombs to other tiles when player moves with pressed A
         if (this.keyADownLastState == this.pressed.placeBomb) {
@@ -177,6 +212,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         if (! this.pressed.placeBomb) {
             return;
         }
+
+        const tileUnderPlayer = this.getTile();
         
         // don't add bomb if there is alredy one
         if (tileUnderPlayer.getData('bomb')) {
@@ -191,10 +228,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         );
     }
 
-    getTile() {
-        return this.getData('tile');
-    }
-
     _addAnims() {
         
         if (Player.#animsLoaded) {
@@ -203,55 +236,70 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         Player.#animsLoaded = true;
 
         const anims = this.scene.anims;
-        
-        if (! anims.exists('man-blue-left-walk')) {
+
+        for (let playerType of ['blue', 'red']) {
             anims.create({
-                key: "man-blue-left-walk",
+                key: `man-${playerType}-left-walk`,
                 frames: [
-                    {key: 'atlas', frame: 'man-blue-move-left.png'},
-                    {key: 'atlas', frame: 'man-blue-move-left-anim-1.png'},
-                    {key: 'atlas', frame: 'man-blue-move-left.png'},
-                    {key: 'atlas', frame: 'man-blue-move-left-anim-2.png'},
+                    {key: 'atlas', frame: `man-${playerType}-move-left.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-left-anim-1.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-left.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-left-anim-2.png`},
                 ],
-                frameRate: 8,
+                frameRate: 9,
                 repeat: -1,
             });
-        }
+            
+            anims.create({
+                key: `man-${playerType}-right-walk`,
+                frames: [
+                    {key: 'atlas', frame: `man-${playerType}-move-right.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-right-anim-1.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-right.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-right-anim-2.png`},
+                ],
+                frameRate: 9,
+                repeat: -1
+            });
+            anims.create({
+                key: `man-${playerType}-up-walk`,
+                frames: [
+                    {key: 'atlas', frame: `man-${playerType}-move-up.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-up-anim-1.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-up.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-up-anim-2.png`},
+                ],
+                frameRate: 9,
+                repeat: -1
+            });
+            anims.create({
+                key: `man-${playerType}-down-walk`,
+                frames: [
+                    {key: 'atlas', frame: `man-${playerType}-move-down.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-down-anim-1.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-down.png`},
+                    {key: 'atlas', frame: `man-${playerType}-move-down-anim-2.png`},
+                ],
+                frameRate: 9,
+                repeat: -1
+            });
 
+            anims.create({
+                key: `man-${playerType}-die`,
+                frames: [
+                    {key: 'atlas', frame: `man-${playerType}-die-1.png`},
+                    {key: 'atlas', frame: `man-${playerType}-die-2.png`},
+                    {key: 'atlas', frame: `man-${playerType}-die-3.png`},
+                    {key: 'atlas', frame: `man-${playerType}-die-4.png`},
+                    {key: 'atlas', frame: `man-${playerType}-die-5.png`},
+                    {key: 'atlas', frame: `man-${playerType}-die-6.png`},
+                    {key: 'atlas', frame: `man-${playerType}-die-7.png`},
+                ],
+                frameRate: 9,
+                repeat: 0
+            });
+        }
         
-        anims.create({
-            key: "man-blue-right-walk",
-            frames: [
-                {key: 'atlas', frame: 'man-blue-move-right.png'},
-                {key: 'atlas', frame: 'man-blue-move-right-anim-1.png'},
-                {key: 'atlas', frame: 'man-blue-move-right.png'},
-                {key: 'atlas', frame: 'man-blue-move-right-anim-2.png'},
-            ],
-            frameRate: 8,
-            repeat: -1
-        });
-        anims.create({
-            key: "man-blue-up-walk",
-            frames: [
-                {key: 'atlas', frame: 'man-blue-move-up.png'},
-                {key: 'atlas', frame: 'man-blue-move-up-anim-1.png'},
-                {key: 'atlas', frame: 'man-blue-move-up.png'},
-                {key: 'atlas', frame: 'man-blue-move-up-anim-2.png'},
-            ],
-            frameRate: 8,
-            repeat: -1
-        });
-        anims.create({
-            key: "man-blue-down-walk",
-            frames: [
-                {key: 'atlas', frame: 'man-blue-move-down.png'},
-                {key: 'atlas', frame: 'man-blue-move-down-anim-1.png'},
-                {key: 'atlas', frame: 'man-blue-move-down.png'},
-                {key: 'atlas', frame: 'man-blue-move-down-anim-2.png'},
-            ],
-            frameRate: 8,
-            repeat: -1
-        });
     }
 
 }

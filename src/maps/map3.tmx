@@ -10,6 +10,7 @@
     <property name="collides" type="bool" value="true"/>
     <property name="destructible" type="bool" value="true"/>
     <property name="name" value="bricks"/>
+    <property name="tile_set_id" type="int" value="1"/>
    </properties>
   </tile>
   <tile id="1" type="ground">
@@ -17,6 +18,7 @@
     <property name="collides" type="bool" value="false"/>
     <property name="destructible" type="bool" value="false"/>
     <property name="name" value="ground"/>
+    <property name="tile_set_id" type="int" value="1"/>
    </properties>
   </tile>
   <tile id="2" type="wall">
@@ -24,6 +26,7 @@
     <property name="collides" type="bool" value="true"/>
     <property name="destructible" type="bool" value="false"/>
     <property name="name" value="wall"/>
+    <property name="tile_set_id" type="int" value="1"/>
    </properties>
   </tile>
   <tile id="3" type="brick">
@@ -31,6 +34,7 @@
     <property name="collides" type="bool" value="true"/>
     <property name="destructible" type="bool" value="true"/>
     <property name="name" value="bricks"/>
+    <property name="tile_set_id" type="int" value="2"/>
    </properties>
   </tile>
   <tile id="4" type="ground">
@@ -38,6 +42,7 @@
     <property name="collides" type="bool" value="false"/>
     <property name="destructible" type="bool" value="false"/>
     <property name="name" value="ground"/>
+    <property name="tile_set_id" type="int" value="2"/>
    </properties>
   </tile>
   <tile id="5" type="wall">
@@ -45,6 +50,7 @@
     <property name="collides" type="bool" value="true"/>
     <property name="destructible" type="bool" value="false"/>
     <property name="name" value="wall"/>
+    <property name="tile_set_id" type="int" value="2"/>
    </properties>
   </tile>
   <tile id="6" type="brick">
@@ -52,6 +58,7 @@
     <property name="collides" type="bool" value="true"/>
     <property name="destructible" type="bool" value="true"/>
     <property name="name" value="bricks"/>
+    <property name="tile_set_id" type="int" value="3"/>
    </properties>
   </tile>
   <tile id="7" type="ground">
@@ -59,6 +66,7 @@
     <property name="collides" type="bool" value="false"/>
     <property name="destructible" type="bool" value="false"/>
     <property name="name" value="ground"/>
+    <property name="tile_set_id" type="int" value="3"/>
    </properties>
   </tile>
   <tile id="8" type="wall">
@@ -66,6 +74,7 @@
     <property name="collides" type="bool" value="true"/>
     <property name="destructible" type="bool" value="false"/>
     <property name="name" value="wall"/>
+    <property name="tile_set_id" type="int" value="3"/>
    </properties>
   </tile>
   <tile id="9" type="brick">
@@ -73,6 +82,7 @@
     <property name="collides" type="bool" value="true"/>
     <property name="destructible" type="bool" value="true"/>
     <property name="name" value="bricks"/>
+    <property name="tile_set_id" type="int" value="4"/>
    </properties>
   </tile>
   <tile id="10" type="ground">
@@ -80,6 +90,7 @@
     <property name="collides" type="bool" value="false"/>
     <property name="destructible" type="bool" value="false"/>
     <property name="name" value="ground"/>
+    <property name="tile_set_id" type="int" value="4"/>
    </properties>
   </tile>
   <tile id="11" type="wall">
@@ -87,6 +98,7 @@
     <property name="collides" type="bool" value="true"/>
     <property name="destructible" type="bool" value="false"/>
     <property name="name" value="wall"/>
+    <property name="tile_set_id" type="int" value="4"/>
    </properties>
   </tile>
   <tile id="12" type="gate">
@@ -120,7 +132,7 @@
  </tileset>
  <layer id="3" name="ground" width="15" height="13">
   <data encoding="base64">
-   DAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAsAAAALAAAACwAAAAoAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACgAAAAsAAAAMAAAADAAAAAsAAAAMAAAACwAAAAwAAAAKAAAADAAAAAsAAAAMAAAACwAAAAwAAAAKAAAADAAAAAoAAAAMAAAADAAAAAoAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAoAAAAKAAAACgAAAAsAAAAMAAAADAAAAAsAAAAMAAAACwAAAAwAAAALAAAADAAAAAsAAAAMAAAACwAAAAwAAAALAAAADAAAAAsAAAAMAAAADAAAAAoAAAALAAAACwAAAAoAAAALAAAACgAAAAoAAAALAAAACgAAAAsAAAALAAAACwAAAAsAAAAMAAAADAAAAAsAAAAMAAAACwAAAAwAAAALAAAADAAAAAsAAAAMAAAACwAAAAwAAAAKAAAADAAAAAsAAAAMAAAADAAAAAsAAAAKAAAACgAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAMAAAADAAAAAsAAAAMAAAACwAAAAwAAAALAAAADAAAAAsAAAAMAAAACgAAAAwAAAALAAAADAAAAAsAAAAMAAAADAAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAoAAAAKAAAACgAAAAsAAAALAAAACwAAAAsAAAAMAAAADAAAAAsAAAAMAAAACwAAAAwAAAALAAAADAAAAAsAAAAMAAAACgAAAAwAAAALAAAADAAAAAsAAAAMAAAADAAAAAsAAAALAAAACgAAAAsAAAAKAAAACwAAAAsAAAALAAAACwAAAAsAAAALAAAACwAAAAsAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAA
+   AwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAIAAAACAAAAAgAAAAEAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAQAAAAIAAAADAAAAAwAAAAIAAAADAAAAAgAAAAMAAAABAAAAAwAAAAIAAAADAAAAAgAAAAMAAAABAAAAAwAAAAEAAAADAAAAAwAAAAEAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAEAAAABAAAAAQAAAAIAAAADAAAAAwAAAAIAAAADAAAAAgAAAAMAAAACAAAAAwAAAAIAAAADAAAAAgAAAAMAAAACAAAAAwAAAAIAAAADAAAAAwAAAAEAAAACAAAAAgAAAAEAAAACAAAAAQAAAAEAAAACAAAAAQAAAAIAAAACAAAAAgAAAAIAAAADAAAAAwAAAAIAAAADAAAAAgAAAAMAAAACAAAAAwAAAAIAAAADAAAAAgAAAAMAAAABAAAAAwAAAAIAAAADAAAAAwAAAAIAAAABAAAAAQAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAADAAAAAwAAAAIAAAADAAAAAgAAAAMAAAACAAAAAwAAAAIAAAADAAAAAQAAAAMAAAACAAAAAwAAAAIAAAADAAAAAwAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAEAAAABAAAAAQAAAAIAAAACAAAAAgAAAAIAAAADAAAAAwAAAAIAAAADAAAAAgAAAAMAAAACAAAAAwAAAAIAAAADAAAAAQAAAAMAAAACAAAAAwAAAAIAAAADAAAAAwAAAAIAAAACAAAAAQAAAAIAAAABAAAAAgAAAAIAAAACAAAAAgAAAAIAAAACAAAAAgAAAAIAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAA
   </data>
  </layer>
  <objectgroup id="2" name="objects">
