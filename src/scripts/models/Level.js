@@ -2,7 +2,7 @@ import Player from './Player';
 import config from '../config';
 
 export default class Level  {
-
+    static #animsLoaded = false;
     players = [];
 
     constructor(scene, x, y) {
@@ -19,6 +19,7 @@ export default class Level  {
         this.scene.physics.world.bounds.height = this.groundLayer.height;
 
         this.bombs = scene.add.group();
+        this._addAnims();
     }
 
 
@@ -26,7 +27,7 @@ export default class Level  {
         const player = new Player(
             this, 
             tileX * config.tileSize, 
-            tileY = config.tileSize,
+            tileY * config.tileSize,
             type
         );
         this._addPlayerColliders(player);
@@ -65,6 +66,31 @@ export default class Level  {
                 }
             }
         });
+    }
+
+    _addAnims() {
+        
+        if (Level.#animsLoaded) {
+            return;
+        }
+        Level.#animsLoaded = true;
+
+        const anims = this.scene.anims;
+
+        
+        anims.create({
+            key: `brick-destroy-tileset1`,
+            frames: [
+                {key: 'atlas', frame: `tile_set1brick-explode1.png`},
+                {key: 'atlas', frame: `tile_set1brick-explode2.png`},
+                {key: 'atlas', frame: `tile_set1brick-explode3.png`},
+                {key: 'atlas', frame: `tile_set1brick-explode4.png`},
+                {key: 'atlas', frame: `tile_set1brick-explode5.png`},
+            ],
+            frameRate: 8,
+            repeat: 0,
+        });
+        
     }
 
 }

@@ -17,6 +17,7 @@ export default function(Phaser) {
     Phaser.Tilemaps.Tile.prototype.removeData = function(key) {
         delete this.data[key];
     }
+
 }
 
 

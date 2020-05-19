@@ -105,6 +105,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"bricks"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":1
                         }],
                  "type":"brick"
                 }, 
@@ -125,6 +130,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"ground"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":1
                         }],
                  "type":"ground"
                 }, 
@@ -145,6 +155,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"wall"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":1
                         }],
                  "type":"wall"
                 }, 
@@ -165,6 +180,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"bricks"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":2
                         }],
                  "type":"brick"
                 }, 
@@ -185,6 +205,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"ground"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":2
                         }],
                  "type":"ground"
                 }, 
@@ -205,6 +230,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"wall"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":2
                         }],
                  "type":"wall"
                 }, 
@@ -225,6 +255,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"bricks"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":3
                         }],
                  "type":"brick"
                 }, 
@@ -245,6 +280,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"ground"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":3
                         }],
                  "type":"ground"
                 }, 
@@ -265,6 +305,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"wall"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":3
                         }],
                  "type":"wall"
                 }, 
@@ -285,6 +330,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"bricks"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":4
                         }],
                  "type":"brick"
                 }, 
@@ -305,6 +355,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"ground"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":4
                         }],
                  "type":"ground"
                 }, 
@@ -325,6 +380,11 @@
                          "name":"name",
                          "type":"string",
                          "value":"wall"
+                        }, 
+                        {
+                         "name":"tile_set_id",
+                         "type":"int",
+                         "value":4
                         }],
                  "type":"wall"
                 }, 

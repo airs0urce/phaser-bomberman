@@ -35,6 +35,13 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         this.once('animationcomplete', this.explode);
 
         this.fireGroup = this.scene.add.group();
+        this.wallDestructingGroup = this.scene.add.group();
+
+        this.groundTile = this.level.map.findTile((tile) => {
+            return (1 === tile.properties.tile_set_id && tile.properties.name == 'ground');
+        });
+
+        this.scene.physics.add.collider(this.level.players, this.wallDestructingGroup);
     }
 
     _createExplodeFireSprite(x, y, dir) {
@@ -61,6 +68,24 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         );
 
         return sprite;   
+    }
+
+    _wallDestroy(tile) {
+        const wallDestruct = this.scene.physics.add.staticSprite(tile.pixelX, tile.pixelY,);
+        wallDestruct.setOrigin(0);
+        wallDestruct.body.setSize(config.tileSize, config.tileSize);
+        wallDestruct.body.setOffset(config.tileSize);
+        const tileSetId = tile.properties.tile_set_id;
+        wallDestruct.anims.play(`brick-destroy-tileset${tileSetId}`);
+        this.wallDestructingGroup.add(wallDestruct);
+        wallDestruct.once('animationcomplete', () => {
+            wallDestruct.destroy();
+        });
+        this.level.map.putTileAt(
+            this.groundTile, 
+            tile.x, 
+            tile.y
+        );
     }
 
     explode() {
@@ -132,79 +157,95 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
           
 
             // get tiles where we have to show explode fire
-            if (explodeXYs.top.tile 
-                && !noExplodeTileNames.includes(explodeXYs.top.tile.properties.name) 
-                && ! explodeXYs.top.tile.getData('bomb-fire') // not a bomb fire
-                && !stopExplode.top) {
-                explodeSprites.push({
-                    // top
-                    dir: 'top',
-                    sprite: this._createExplodeFireSprite(explodeXYs.top.x, explodeXYs.top.y, 'top'),
-                    anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
-                    tile: explodeXYs.top.tile
-                });
-            } else {
-                stopExplode.top = true;
+
+            if (! stopExplode.top && explodeXYs.top.tile) {
+                if (!noExplodeTileNames.includes(explodeXYs.top.tile.properties.name) 
+                    && !explodeXYs.top.tile.getData('bomb-fire') // not a bomb fire
+                ) {
+                    explodeSprites.push({
+                        // top
+                        dir: 'top',
+                        sprite: this._createExplodeFireSprite(explodeXYs.top.x, explodeXYs.top.y, 'top'),
+                        anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
+                        tile: explodeXYs.top.tile
+                    });
+                } else {
+                    if (explodeXYs.top.tile.properties.name === 'bricks') {
+                        this._wallDestroy(explodeXYs.top.tile);
+                    }
+                    stopExplode.top = true;
+                }
+                if (explodeXYs.top.tile.getData('bomb')) {
+                     stopExplode.top = true;   
+                }
             }
 
-            if (explodeXYs.top.tile && explodeXYs.top.tile.getData('bomb')) {
-                 stopExplode.top = true;   
+            if (! stopExplode.bottom && explodeXYs.bottom.tile) {
+                if (!noExplodeTileNames.includes(explodeXYs.bottom.tile.properties.name) 
+                    && ! explodeXYs.bottom.tile.getData('bomb-fire') // not a bomb fire
+                ) {
+                    explodeSprites.push({
+                        // bottom
+                        dir: 'bottom',
+                        sprite: this._createExplodeFireSprite(explodeXYs.bottom.x, explodeXYs.bottom.y, 'bottom'),
+                        anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
+                        tile: explodeXYs.bottom.tile
+                    });
+                } else {
+                    if (explodeXYs.bottom.tile.properties.name === 'bricks') {
+                        this._wallDestroy(explodeXYs.bottom.tile);
+                    }
+                    stopExplode.bottom = true;
+                }
+                if (explodeXYs.bottom.tile.getData('bomb')) {
+                     stopExplode.bottom = true;   
+                }
             }
 
-            if (explodeXYs.bottom.tile 
-                && !noExplodeTileNames.includes(explodeXYs.bottom.tile.properties.name) 
-                && ! explodeXYs.bottom.tile.getData('bomb-fire') // not a bomb fire
-                && !stopExplode.bottom) {
-                explodeSprites.push({
-                    // bottom
-                    dir: 'bottom',
-                    sprite: this._createExplodeFireSprite(explodeXYs.bottom.x, explodeXYs.bottom.y, 'bottom'),
-                    anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
-                    tile: explodeXYs.bottom.tile
-                });
-            } else {
-                stopExplode.bottom = true;
-            }
-            if (explodeXYs.bottom.tile && explodeXYs.bottom.tile.getData('bomb')) {
-                 stopExplode.bottom = true;   
-            }
-
-            if (explodeXYs.left.tile 
-                && !noExplodeTileNames.includes(explodeXYs.left.tile.properties.name) 
-                && ! explodeXYs.left.tile.getData('bomb-fire') // not a bomb fire
-                && !stopExplode.left) {
-                explodeSprites.push({
-                    // left
-                    dir: 'left',
-                    sprite: this._createExplodeFireSprite(explodeXYs.left.x, explodeXYs.left.y, 'left'),
-                    anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
-                    tile: explodeXYs.left.tile
-                });
-            } else {
-                stopExplode.left = true;
-            }
-            if (explodeXYs.left.tile && explodeXYs.left.tile.getData('bomb')) {
-                 stopExplode.left = true;   
+            if (! stopExplode.left && explodeXYs.left.tile) {
+                if (!noExplodeTileNames.includes(explodeXYs.left.tile.properties.name) 
+                    && ! explodeXYs.left.tile.getData('bomb-fire') // not a bomb fire
+                ) {
+                    explodeSprites.push({
+                        // left
+                        dir: 'left',
+                        sprite: this._createExplodeFireSprite(explodeXYs.left.x, explodeXYs.left.y, 'left'),
+                        anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
+                        tile: explodeXYs.left.tile
+                    });
+                } else {
+                    if (explodeXYs.left.tile.properties.name === 'bricks') {
+                        this._wallDestroy(explodeXYs.left.tile);
+                    }
+                    stopExplode.left = true;
+                }
+                if (explodeXYs.left.tile.getData('bomb')) {
+                     stopExplode.left = true;   
+                }
             }
 
-            if (explodeXYs.right.tile
-                && !noExplodeTileNames.includes(explodeXYs.right.tile.properties.name)  
-                && ! explodeXYs.right.tile.getData('bomb-fire') // not a bomb fire
-                && !stopExplode.right) {     
-
-                explodeSprites.push({
-                    // right
-                    dir: 'right',
-                    sprite: this._createExplodeFireSprite(explodeXYs.right.x, explodeXYs.right.y, 'right'),
-                    anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
-                    tile: explodeXYs.right.tile
-                });
-            } else {
-                stopExplode.right = true;
+            if (! stopExplode.right && explodeXYs.right.tile) {
+                if (!noExplodeTileNames.includes(explodeXYs.right.tile.properties.name)  
+                    && ! explodeXYs.right.tile.getData('bomb-fire') // not a bomb fire
+                ) {     
+                    explodeSprites.push({
+                        // right
+                        dir: 'right',
+                        sprite: this._createExplodeFireSprite(explodeXYs.right.x, explodeXYs.right.y, 'right'),
+                        anim: (tail ? 'bomb-explode-tail': 'bomb-explode-line'),
+                        tile: explodeXYs.right.tile
+                    });
+                } else {
+                    if (explodeXYs.right.tile.properties.name === 'bricks') {
+                        this._wallDestroy(explodeXYs.right.tile);
+                    }
+                    stopExplode.right = true;
+                }
+                if (explodeXYs.right.tile.getData('bomb')) {
+                     stopExplode.right = true;   
+                }
             }
-            if (explodeXYs.right.tile && explodeXYs.right.tile.getData('bomb')) {
-                 stopExplode.right = true;   
-            }
+            
         }
 
         for (let explodeSprite of explodeSprites) {            

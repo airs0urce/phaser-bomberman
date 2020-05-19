@@ -50,11 +50,16 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         const inputs = this.scene.inputs;
 
         const pressed = {up: false, down: false, left: false, right: false, placeBomb: false};
-        pressed.up = inputs.cursors.up.isDown;
-        pressed.down = inputs.cursors.down.isDown;
-        pressed.left = inputs.cursors.left.isDown;
-        pressed.right = inputs.cursors.right.isDown;
-        pressed.placeBomb = inputs.keyA.isDown;
+        
+        if (this.type == 'blue') {
+            pressed.up = inputs.cursors.up.isDown;
+            pressed.down = inputs.cursors.down.isDown;
+            pressed.left = inputs.cursors.left.isDown;
+            pressed.right = inputs.cursors.right.isDown;
+            pressed.placeBomb = inputs.keyA.isDown;
+        }
+        
+        
         if (inputs.gamepad.total != 0) {
             const pad = inputs.gamepad.getPad(this.gamepadIndex);
             if (pad) {
