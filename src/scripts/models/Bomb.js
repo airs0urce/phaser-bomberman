@@ -5,6 +5,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
     static #explodeSoundPlaying = 0;
     explodeStarted = false;
     static #safePlayerOverlapPx = 6;
+    touchingBombs = [];
     
 
     constructor(player, x, y) {
@@ -160,8 +161,8 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
 
             if (! stopExplode.top && explodeXYs.top.tile) {
                 if (!noExplodeTileNames.includes(explodeXYs.top.tile.properties.name) 
-                    && !explodeXYs.top.tile.getData('bomb-fire') // not a bomb fire
-                ) {
+                    && !explodeXYs.top.tile.getData('bomb-fire-center')
+                    && !explodeXYs.top.tile.getData('bomb')) {
                     explodeSprites.push({
                         // top
                         dir: 'top',
@@ -173,17 +174,25 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                     if (explodeXYs.top.tile.properties.name === 'bricks') {
                         this._wallDestroy(explodeXYs.top.tile);
                     }
-                    stopExplode.top = true;
+
+                    if (!explodeXYs.top.tile.getData('bomb-fire')) {
+                        stopExplode.top = true;    
+                    }
+
+                    if (explodeXYs.top.tile.getData('bomb')) {
+                        this.touchingBombs.push(explodeXYs.top.tile.getData('bomb'));
+                    }
+                    
                 }
-                if (explodeXYs.top.tile.getData('bomb')) {
+                if (explodeXYs.top.tile.getData('bomb-fire-center')) {
                      stopExplode.top = true;   
                 }
             }
 
             if (! stopExplode.bottom && explodeXYs.bottom.tile) {
-                if (!noExplodeTileNames.includes(explodeXYs.bottom.tile.properties.name) 
-                    && ! explodeXYs.bottom.tile.getData('bomb-fire') // not a bomb fire
-                ) {
+                if (!noExplodeTileNames.includes(explodeXYs.bottom.tile.properties.name)
+                    && !explodeXYs.bottom.tile.getData('bomb-fire-center')
+                    && !explodeXYs.bottom.tile.getData('bomb')) {
                     explodeSprites.push({
                         // bottom
                         dir: 'bottom',
@@ -195,17 +204,23 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                     if (explodeXYs.bottom.tile.properties.name === 'bricks') {
                         this._wallDestroy(explodeXYs.bottom.tile);
                     }
-                    stopExplode.bottom = true;
+                    
+                    if (!explodeXYs.bottom.tile.getData('bomb-fire')) {
+                        stopExplode.bottom = true;
+                    }
+                    if (explodeXYs.bottom.tile.getData('bomb')) {
+                        this.touchingBombs.push(explodeXYs.bottom.tile.getData('bomb'));
+                    }
                 }
-                if (explodeXYs.bottom.tile.getData('bomb')) {
+                if (explodeXYs.bottom.tile.getData('bomb-fire-center')) {
                      stopExplode.bottom = true;   
                 }
             }
 
             if (! stopExplode.left && explodeXYs.left.tile) {
-                if (!noExplodeTileNames.includes(explodeXYs.left.tile.properties.name) 
-                    && ! explodeXYs.left.tile.getData('bomb-fire') // not a bomb fire
-                ) {
+                if (!noExplodeTileNames.includes(explodeXYs.left.tile.properties.name)
+                    && !explodeXYs.left.tile.getData('bomb-fire-center')
+                    && !explodeXYs.left.tile.getData('bomb')) {
                     explodeSprites.push({
                         // left
                         dir: 'left',
@@ -217,17 +232,24 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                     if (explodeXYs.left.tile.properties.name === 'bricks') {
                         this._wallDestroy(explodeXYs.left.tile);
                     }
-                    stopExplode.left = true;
+                    
+                    if (!explodeXYs.left.tile.getData('bomb-fire')) {
+                        stopExplode.left = true;
+                    }
+
+                    if (explodeXYs.left.tile.getData('bomb')) {
+                        this.touchingBombs.push(explodeXYs.left.tile.getData('bomb'));
+                    }
                 }
-                if (explodeXYs.left.tile.getData('bomb')) {
+                if (explodeXYs.left.tile.getData('bomb-fire-center')) {
                      stopExplode.left = true;   
                 }
             }
 
             if (! stopExplode.right && explodeXYs.right.tile) {
-                if (!noExplodeTileNames.includes(explodeXYs.right.tile.properties.name)  
-                    && ! explodeXYs.right.tile.getData('bomb-fire') // not a bomb fire
-                ) {     
+                if (!noExplodeTileNames.includes(explodeXYs.right.tile.properties.name)
+                    && !explodeXYs.right.tile.getData('bomb-fire-center')
+                    && !explodeXYs.right.tile.getData('bomb')) {     
                     explodeSprites.push({
                         // right
                         dir: 'right',
@@ -239,9 +261,14 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                     if (explodeXYs.right.tile.properties.name === 'bricks') {
                         this._wallDestroy(explodeXYs.right.tile);
                     }
-                    stopExplode.right = true;
+                    if (!explodeXYs.right.tile.getData('bomb-fire')) {
+                        stopExplode.right = true;
+                    }
+                    if (explodeXYs.right.tile.getData('bomb')) {
+                        this.touchingBombs.push(explodeXYs.right.tile.getData('bomb'));
+                    }
                 }
-                if (explodeXYs.right.tile.getData('bomb')) {
+                if (explodeXYs.right.tile.getData('bomb-fire-center')) {
                      stopExplode.right = true;   
                 }
             }
@@ -259,7 +286,12 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         let centerSprite = true;
         for (let explodeSprite of explodeSprites) {
 
-            explodeSprite.tile.setData('bomb-fire', true);
+            if (centerSprite) {
+                explodeSprite.tile.setData('bomb-fire-center', true);
+            } else {
+                explodeSprite.tile.setData('bomb-fire', true);
+            }
+            
             explodeSprite.sprite.anims.play(explodeSprite.anim);
             explodeSprite.sprite.once('animationcomplete', () => {
                 explodeSprite.sprite.destroy();
@@ -273,16 +305,14 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
 
 
                     // explode bombs that touching fire from this bomb                    
-                    for (let i = 1; i < explodeSprites.length; i++) {
-                        if (explodeSprites[i].tile && explodeSprites[i].tile.getData('bomb')) {         
-                            explodeSprites[i].tile.getData('bomb').explode();
-                        }
+                    for (const bomb of this.touchingBombs) {
+                        bomb.explode();
                     }
-
                 });
                 explodeSprite.sprite.once('animationcomplete', () => {
                     for (let explodeSprite of explodeSprites) {
                         explodeSprite.tile.removeData('bomb-fire');
+                        explodeSprite.tile.removeData('bomb-fire-center');
                     }
                 })
             }

@@ -86,8 +86,37 @@ export default class Level  {
                 {key: 'atlas', frame: `tile_set1brick-explode3.png`},
                 {key: 'atlas', frame: `tile_set1brick-explode4.png`},
                 {key: 'atlas', frame: `tile_set1brick-explode5.png`},
+                {key: 'atlas', frame: `tile_set1brick-explode6.png`},
             ],
-            frameRate: 8,
+            frameRate: 10,
+            repeat: 0,
+        });
+
+        anims.create({
+            key: `brick-destroy-tileset2`,
+            frames: [
+                {key: 'atlas', frame: `tile_set2brick-explode1.png`},
+                {key: 'atlas', frame: `tile_set2brick-explode2.png`},
+                {key: 'atlas', frame: `tile_set2brick-explode3.png`},
+                {key: 'atlas', frame: `tile_set2brick-explode4.png`},
+                {key: 'atlas', frame: `tile_set2brick-explode5.png`},
+                {key: 'atlas', frame: `tile_set2brick-explode6.png`},
+            ],
+            frameRate: 10,
+            repeat: 0,
+        });
+
+        anims.create({
+            key: `brick-destroy-tileset3`,
+            frames: [
+                {key: 'atlas', frame: `tile_set3brick-explode1.png`},
+                {key: 'atlas', frame: `tile_set3brick-explode2.png`},
+                {key: 'atlas', frame: `tile_set3brick-explode3.png`},
+                {key: 'atlas', frame: `tile_set3brick-explode4.png`},
+                {key: 'atlas', frame: `tile_set3brick-explode5.png`},
+                {key: 'atlas', frame: `tile_set3brick-explode6.png`},
+            ],
+            frameRate: 10,
             repeat: 0,
         });
         

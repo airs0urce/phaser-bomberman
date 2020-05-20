@@ -27,8 +27,8 @@ var config = {
 
 const game = new Phaser.Game(config);
 
-game.sound.volume = 0;
-// game.sound.volume = 1;
+// game.sound.volume = 0;
+game.sound.volume = 1;
 
 
 
