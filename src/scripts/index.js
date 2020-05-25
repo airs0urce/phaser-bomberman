@@ -10,7 +10,7 @@ var config = {
     width: 240,
     height: 208,
     pixelArt: true,
-    zoom: 2.6,
+    zoom: 3.2,
     backgroundColor: "#000",
     input: {
         gamepad: true
@@ -27,8 +27,8 @@ var config = {
 
 const game = new Phaser.Game(config);
 
-// game.sound.volume = 0;
-game.sound.volume = 1;
+game.sound.volume = 0;
+// game.sound.volume = 1;
 
 
 

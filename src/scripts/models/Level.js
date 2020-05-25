@@ -13,7 +13,8 @@ export default class Level  {
             'ground', 
             this.map.addTilesetImage('tileset-ground'), 
             0, 0
-        ).setCollisionByProperty({collides: true});
+        );
+        this.groundLayer.setCollisionByProperty({collides: true});
         
         this.scene.physics.world.bounds.width = this.groundLayer.width;
         this.scene.physics.world.bounds.height = this.groundLayer.height;
@@ -115,6 +116,20 @@ export default class Level  {
                 {key: 'atlas', frame: `tile_set3brick-explode4.png`},
                 {key: 'atlas', frame: `tile_set3brick-explode5.png`},
                 {key: 'atlas', frame: `tile_set3brick-explode6.png`},
+            ],
+            frameRate: 10,
+            repeat: 0,
+        });
+
+        anims.create({
+            key: `brick-destroy-tileset4`,
+            frames: [
+                {key: 'atlas', frame: `tile_set4brick-explode1.png`},
+                {key: 'atlas', frame: `tile_set4brick-explode2.png`},
+                {key: 'atlas', frame: `tile_set4brick-explode3.png`},
+                {key: 'atlas', frame: `tile_set4brick-explode4.png`},
+                {key: 'atlas', frame: `tile_set4brick-explode5.png`},
+                {key: 'atlas', frame: `tile_set4brick-explode6.png`},
             ],
             frameRate: 10,
             repeat: 0,

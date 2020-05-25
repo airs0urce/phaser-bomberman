@@ -61,13 +61,42 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         
         
         if (inputs.gamepad.total != 0) {
-            const pad = inputs.gamepad.getPad(this.gamepadIndex);
+            const pad = inputs.gamepad.getPad(this.gamepadIndex);            
             if (pad) {
-                if (! pressed.up) pressed.up = pad.up;
-                if (! pressed.down) pressed.down = pad.down;
-                if (! pressed.left) pressed.left = pad.left;
-                if (! pressed.right) pressed.right = pad.right;
-                if (! pressed.placeBomb) pressed.placeBomb = pad.A;
+
+                switch (pad.getAxisValue(0)) {
+                    case -1:
+                        pressed.left = true;
+                        break;
+                    case 1:
+                        pressed.right = true;
+                        break;
+                }
+                switch (pad.getAxisValue(1)) {
+                    case -1:
+                        pressed.up = true;
+                        break;
+                    case 1:
+                        pressed.down = true;
+                        break;
+                }
+                
+
+                if (! pressed.up) {
+                    pressed.up = pad.up;
+                }
+                if (! pressed.down) {
+                    pressed.down = pad.down;
+                }
+                if (! pressed.left) {
+                    pressed.left = pad.left;
+                }
+                if (! pressed.right) {
+                    pressed.right = pad.right;
+                }
+                if (! pressed.placeBomb) {
+                    pressed.placeBomb = pad.A;
+                }
             }
         }
         this.pressed = pressed;
@@ -162,10 +191,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
         if (this.pressed.up && this.body.blocked.up) {
-
             const upLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x, this.body.y - 1);
             const upRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y - 1);
-
+               
             if (!upLeftTile.getData('bomb') && !upRightTile.getData('bomb')) {
                 if (upLeftTile && upLeftTile.properties.name == 'ground') {
                     this.body.setVelocityX(-this.speed);

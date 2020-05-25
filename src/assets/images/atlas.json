@@ -1419,6 +1419,126 @@
 				"w": 16,
 				"h": 16
 			}
+		},
+		"tile_set4brick-explode1.png": {
+			"frame": {
+				"x": 1402,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"tile_set4brick-explode2.png": {
+			"frame": {
+				"x": 1418,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"tile_set4brick-explode3.png": {
+			"frame": {
+				"x": 1434,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"tile_set4brick-explode4.png": {
+			"frame": {
+				"x": 1450,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"tile_set4brick-explode5.png": {
+			"frame": {
+				"x": 1466,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"tile_set4brick-explode6.png": {
+			"frame": {
+				"x": 1482,
+				"y": 0,
+				"w": 16,
+				"h": 15
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 15
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 15
+			}
 		}
 	},
 	"meta": {
@@ -1427,7 +1547,7 @@
 		"image": "spritesheet.png",
 		"format": "RGBA8888",
 		"size": {
-			"w": 1402,
+			"w": 1498,
 			"h": 23
 		},
 		"scale": "1"

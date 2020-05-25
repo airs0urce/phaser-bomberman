@@ -38,10 +38,6 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         this.fireGroup = this.scene.add.group();
         this.wallDestructingGroup = this.scene.add.group();
 
-        this.groundTile = this.level.map.findTile((tile) => {
-            return (1 === tile.properties.tile_set_id && tile.properties.name == 'ground');
-        });
-
         this.scene.physics.add.collider(this.level.players, this.wallDestructingGroup);
     }
 
@@ -82,11 +78,10 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         wallDestruct.once('animationcomplete', () => {
             wallDestruct.destroy();
         });
-        this.level.map.putTileAt(
-            this.groundTile, 
-            tile.x, 
-            tile.y
-        );
+        
+        
+        // this.level.map.replaceTile(tile, 5);
+        this.level.map.replaceTile(tile, {name: 'ground', tile_set_id: tileSetId});
     }
 
     explode() {

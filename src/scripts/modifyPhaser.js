@@ -18,6 +18,44 @@ export default function(Phaser) {
         delete this.data[key];
     }
 
+    // add functions to tilemap
+    
+    /*
+    newTileId:
+            format 1: tile index
+            format 2: object that matches properties of needed tile. First atched tile will be used
+    */
+    Phaser.Tilemaps.Tilemap.prototype.replaceTile = function(tile, newTileId) {
+        const tileset = this.tilesets[0];
+
+        let tileIndex = null;
+        if (typeof newTileId == 'object') {
+            for (let index of Object.keys(tileset.tileProperties)) {
+                index = +index;
+
+                let allFieldsMatches = true;
+                for (let field of Object.keys(newTileId)) {
+                    if (newTileId[field] != tileset.tileProperties[index][field]) {
+                        allFieldsMatches = false;
+                        break;
+                    }
+                }
+
+                if (allFieldsMatches) {
+                    tileIndex = index + 1;
+                    break;
+                }
+            }
+        } else {
+            tileIndex = newTileId;
+        }
+
+        
+        this.removeTile(tile, tileIndex);
+        const newTile = this.getTileAt(tile.x, tile.y);
+        newTile.properties = tileset.tileProperties[tileIndex - 1];
+    }
+
 }
 
 
