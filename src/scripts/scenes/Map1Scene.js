@@ -59,8 +59,8 @@ export class Map1Scene extends Phaser.Scene {
 
 
 
-        this.players.add(this.level.addPlayer(1, 2, 'red').setGamepadIndex(0));
-        this.players.add(this.level.addPlayer(11, 11, 'blue').setGamepadIndex(1));
+        // this.players.add(this.level.addPlayer(1, 2, 'red').setGamepadIndex(0));
+        this.players.add(this.level.addPlayer(1, 1, 'blue').setGamepadIndex(1));
 
         // const debugGraphics = this.add.graphics().setAlpha(0.75);
         //   this.level.groundLayer.renderDebug(debugGraphics, {tileColor: null,collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tilesfaceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges

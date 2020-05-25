@@ -22,7 +22,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.type = type;
 
         this.level = level;
-        this.scene = level.scene;
+        this.scene = level.scene;        
 
         this.groundLayer = this.level.groundLayer;
 

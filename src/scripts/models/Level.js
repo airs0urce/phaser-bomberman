@@ -20,6 +20,7 @@ export default class Level  {
         this.scene.physics.world.bounds.height = this.groundLayer.height;
 
         this.bombs = scene.add.group();
+        this.bonuses = scene.add.group();
         this._addAnims();
     }
 
@@ -40,10 +41,30 @@ export default class Level  {
 
     addBomb(bomb) {
         this.bombs.add(bomb);
+
+
+        // bomb.on();
     }
 
     removeBomb(bomb) {
         this.bombs.remove(bomb, true, true);
+    }
+
+    createBonus(x, y, type) {
+        switch (type) {
+            case 'fire': 
+                const sprite = this.scene.physics.add.sprite(
+                    x*config.tileSize, 
+                    y*config.tileSize, 
+                    'atlas', 'powerup-bomb-explode.png'
+                );
+                sprite.setOrigin(0);
+                sprite.body.setSize(config.tileSize, config.tileSize);
+                sprite.body.setOffset(0, 0);
+                this.bonuses.add(sprite);
+                break;
+        }
+        
     }
 
     _addPlayerColliders(player) {

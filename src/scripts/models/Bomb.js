@@ -1,4 +1,5 @@
 import config from '../config';
+import utils from '../utils';
 
 export default class Bomb extends Phaser.Physics.Arcade.Sprite {
     static #animsLoaded = false;
@@ -6,6 +7,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
     explodeStarted = false;
     static #safePlayerOverlapPx = 6;
     touchingBombs = [];
+    scene = null;
     
 
     constructor(player, x, y) {
@@ -69,19 +71,25 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
 
     _wallDestroy(tile) {
         const wallDestruct = this.scene.physics.add.staticSprite(tile.pixelX, tile.pixelY,);
+
         wallDestruct.setOrigin(0);
         wallDestruct.body.setSize(config.tileSize, config.tileSize);
         wallDestruct.body.setOffset(config.tileSize);
         const tileSetId = tile.properties.tile_set_id;
-        wallDestruct.anims.play(`brick-destroy-tileset${tileSetId}`);
+
         this.wallDestructingGroup.add(wallDestruct);
+
+        const bonusUnderTile = (1 == utils.rand(1,10));
+        if (bonusUnderTile) {
+            this.level.createBonus(tile.x, tile.y, 'fire');    
+            wallDestruct.visible = false;
+        }
+        this.level.map.replaceTile(tile, {name: 'ground', tile_set_id: tileSetId});
+
+        wallDestruct.anims.play(`brick-destroy-tileset${tileSetId}`);
         wallDestruct.once('animationcomplete', () => {
             wallDestruct.destroy();
         });
-        
-        
-        // this.level.map.replaceTile(tile, 5);
-        this.level.map.replaceTile(tile, {name: 'ground', tile_set_id: tileSetId});
     }
 
     explode() {
@@ -309,6 +317,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                         explodeSprite.tile.removeData('bomb-fire');
                         explodeSprite.tile.removeData('bomb-fire-center');
                     }
+                    this.level.removeBomb(this);
                 })
             }
             centerSprite = false;
@@ -316,8 +325,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         }
 
         this.getData('tile').removeData('bomb');
-        this.destroy();
-
+        this.visible = false;
     }
 
     destroy() {
