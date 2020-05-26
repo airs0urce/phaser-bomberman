@@ -2,7 +2,7 @@
   "name": "phaser3-bomberman",
   "version": "1.0.0",
   "description": "Bomberman game",
-  "main": "src/index.js",
+  "main": "src/scripts/index.js",
   "scripts": {
     "build": "webpack --config webpack/prod.js ",
     "start": "webpack-dev-server --config webpack/base.js --open"
