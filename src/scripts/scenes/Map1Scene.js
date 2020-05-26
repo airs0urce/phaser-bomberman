@@ -31,6 +31,8 @@ export class Map1Scene extends Phaser.Scene {
 
         // PLayer
         this.load.audio('player-die', ['src/assets/audio/player-die.mp3']);
+        this.load.audio('player-took-bonus', ['src/assets/audio/player-took-bonus.mp3']);
+        
         
     }
 
@@ -47,8 +49,9 @@ export class Map1Scene extends Phaser.Scene {
         this.sounds = {
             titleTrack: this.sound.add('titleTrack'),
             bombExplode: this.sound.add('bomb-explode'),
-            bombPlace: this.sound.add('bomb-place'),
+            bombPlace: this.sound.add('bomb-place').setVolume(1.4),
             playerDie: this.sound.add('player-die'),
+            playerTookBonus: this.sound.add('player-took-bonus'),
         }
 
         this.sounds.titleTrack.play({loop: true});

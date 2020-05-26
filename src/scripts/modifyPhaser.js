@@ -25,7 +25,7 @@ export default function(Phaser) {
             format 1: tile index
             format 2: object that matches properties of needed tile. First atched tile will be used
     */
-    Phaser.Tilemaps.Tilemap.prototype.replaceTile = function(tile, newTileId) {
+    Phaser.Tilemaps.Tilemap.prototype.replaceTile = function(tile, newTileId, keepData = true) {
         const tileset = this.tilesets[0];
 
         let tileIndex = null;
@@ -50,10 +50,15 @@ export default function(Phaser) {
             tileIndex = newTileId;
         }
 
-        
+        let data = {};
+        if (keepData) {
+            data = tile.data;
+        }
+
         this.removeTile(tile, tileIndex);
         const newTile = this.getTileAt(tile.x, tile.y);
         newTile.properties = tileset.tileProperties[tileIndex - 1];
+        newTile.data = data;
     }
 
 }

@@ -1,9 +1,15 @@
 import Player from './Player';
 import config from '../config';
+import utils from '../utils';
+import * as _ from 'lodash';
 
 export default class Level  {
     static #animsLoaded = false;
     players = [];
+    static #bonusOverlapPx = 6;
+
+    bombs = null;
+    bonuses = null;
 
     constructor(scene, x, y) {
         
@@ -22,6 +28,7 @@ export default class Level  {
         this.bombs = scene.add.group();
         this.bonuses = scene.add.group();
         this._addAnims();
+        this._addBonusesOnMap();
     }
 
 
@@ -50,19 +57,68 @@ export default class Level  {
         this.bombs.remove(bomb, true, true);
     }
 
-    createBonus(x, y, type) {
-        switch (type) {
-            case 'fire': 
-                const sprite = this.scene.physics.add.sprite(
-                    x*config.tileSize, 
-                    y*config.tileSize, 
-                    'atlas', 'powerup-bomb-explode.png'
-                );
-                sprite.setOrigin(0);
-                sprite.body.setSize(config.tileSize, config.tileSize);
-                sprite.body.setOffset(0, 0);
-                this.bonuses.add(sprite);
-                break;
+    dropBonusIfNeed(tile) {
+        const containsBonus = tile.getData('contains-bonus');
+        if (! containsBonus) {
+            return;
+        }
+
+        // 'bonus-bomb-power' or 'bonus-bomb-count'
+        const type = containsBonus
+
+        const bonus = this.scene.physics.add.sprite(
+            tile.x*config.tileSize, 
+            tile.y*config.tileSize, 
+            'atlas', `${type}.png`
+        );
+        bonus.setData('type', type);
+        bonus.setOrigin(0);
+        bonus.body.setSize(config.tileSize, config.tileSize);
+        bonus.body.setOffset(0, 0);
+        bonus.body.setSize(
+            config.tileSize - Level.#bonusOverlapPx*2, 
+            config.tileSize - Level.#bonusOverlapPx*2
+        );
+        bonus.body.setOffset(
+            Level.#bonusOverlapPx, 
+            Level.#bonusOverlapPx
+        );
+
+        bonus.setData('tile', tile);        
+        tile.setData('bonus', bonus);
+        this.bonuses.add(bonus);
+
+        return true;
+        
+    }
+
+    _addBonusesOnMap() {
+        let bricksTiles = [];
+        this.map.forEachTile((tile) => {
+            if (tile.properties.name == 'bricks') {
+                bricksTiles.push(tile)
+            }
+        });
+
+        // 'bonus-bomb-power' / 'bonus-bomb-count'
+        const bonusBombPowerAmount = Math.round(bricksTiles.length / 12);
+        const bonusBombCountAmount = Math.round(bricksTiles.length / 12);
+
+        let i;
+        // put bomb power bonuses
+        for (i = 0; i < bonusBombPowerAmount; i++) {
+            const tileIndex = utils.rand(0, bricksTiles.length - 1);
+            const tile = bricksTiles[tileIndex];
+            tile.setData('contains-bonus', 'bonus-bomb-power');
+            bricksTiles = _.without(bricksTiles, tile);
+        }
+
+        // put bomb count bonuses
+        for (i = 0; i < bonusBombCountAmount; i++) {
+            const tileIndex = utils.rand(0, bricksTiles.length - 1);
+            const tile = bricksTiles[tileIndex];
+            tile.setData('contains-bonus', 'bonus-bomb-count');
+            bricksTiles = _.without(bricksTiles, tile);
         }
         
     }
@@ -87,6 +143,17 @@ export default class Level  {
                     player.setData('blockMovement', (pX > bX) ? 'left': 'right');
                 }
             }
+        });
+
+        this.scene.physics.add.overlap(player, this.bonuses, (player, bonus) => {
+            if (bonus.getData('type') == 'bonus-bomb-power') {
+                player.bombPower += 1;
+            } else if (bonus.getData('type') == 'bonus-bomb-count') {
+                player.bombsMax += 1;
+            }
+            this.scene.sounds.playerTookBonus.play();
+            bonus.getData('tile').removeData('bonus');
+            bonus.destroy();
         });
     }
 
@@ -151,6 +218,20 @@ export default class Level  {
                 {key: 'atlas', frame: `tile_set4brick-explode4.png`},
                 {key: 'atlas', frame: `tile_set4brick-explode5.png`},
                 {key: 'atlas', frame: `tile_set4brick-explode6.png`},
+            ],
+            frameRate: 10,
+            repeat: 0,
+        });
+
+        anims.create({
+            key: `bonus-explode`,
+            frames: [
+                {key: 'atlas', frame: `bonus-explode1.png`},
+                {key: 'atlas', frame: `bonus-explode2.png`},
+                {key: 'atlas', frame: `bonus-explode3.png`},
+                {key: 'atlas', frame: `bonus-explode4.png`},
+                {key: 'atlas', frame: `bonus-explode5.png`},
+                {key: 'atlas', frame: `bonus-explode6.png`},
             ],
             frameRate: 10,
             repeat: 0,

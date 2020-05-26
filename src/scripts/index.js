@@ -19,7 +19,7 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: {y: 0},
-            debug: true
+            // debug: true
         }
     },
     scene: [WelcomeScene, Map1Scene],
@@ -28,7 +28,7 @@ var config = {
 const game = new Phaser.Game(config);
 
 game.sound.volume = 0;
-// game.sound.volume = 1;
+// game.sound.volume = 0.5;
 
 
 

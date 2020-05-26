@@ -34,6 +34,8 @@
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "phaser": "^3.23.0",
     "phaser3_gui_inspector": "^1.1.1",
+    "random": "^2.2.0",
+    "random-js": "^2.1.0",
     "underscore": "^1.10.2"
   }
 }

@@ -300,7 +300,7 @@
 				"h": 16
 			}
 		},
-		"finish.png": {
+		"bonus-bomb-count.png": {
 			"frame": {
 				"x": 64,
 				"y": 16,
@@ -320,10 +320,170 @@
 				"h": 16
 			}
 		},
-		"man-blue-die-1.png": {
+		"bonus-bomb-power.png": {
 			"frame": {
 				"x": 80,
 				"y": 16,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"bonus-explode1.png": {
+			"frame": {
+				"x": 96,
+				"y": 16,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"bonus-explode2.png": {
+			"frame": {
+				"x": 112,
+				"y": 16,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"bonus-explode3.png": {
+			"frame": {
+				"x": 128,
+				"y": 16,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"bonus-explode4.png": {
+			"frame": {
+				"x": 144,
+				"y": 16,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"bonus-explode5.png": {
+			"frame": {
+				"x": 160,
+				"y": 16,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"bonus-explode6.png": {
+			"frame": {
+				"x": 0,
+				"y": 32,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"finish.png": {
+			"frame": {
+				"x": 16,
+				"y": 32,
+				"w": 16,
+				"h": 16
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 16,
+				"h": 16
+			},
+			"sourceSize": {
+				"w": 16,
+				"h": 16
+			}
+		},
+		"man-blue-die-1.png": {
+			"frame": {
+				"x": 32,
+				"y": 32,
 				"w": 23,
 				"h": 23
 			},
@@ -342,8 +502,8 @@
 		},
 		"man-blue-die-2.png": {
 			"frame": {
-				"x": 103,
-				"y": 16,
+				"x": 55,
+				"y": 32,
 				"w": 23,
 				"h": 23
 			},
@@ -362,8 +522,8 @@
 		},
 		"man-blue-die-3.png": {
 			"frame": {
-				"x": 126,
-				"y": 16,
+				"x": 78,
+				"y": 32,
 				"w": 23,
 				"h": 23
 			},
@@ -382,8 +542,8 @@
 		},
 		"man-blue-die-4.png": {
 			"frame": {
-				"x": 149,
-				"y": 16,
+				"x": 101,
+				"y": 32,
 				"w": 23,
 				"h": 23
 			},
@@ -402,8 +562,8 @@
 		},
 		"man-blue-die-5.png": {
 			"frame": {
-				"x": 0,
-				"y": 39,
+				"x": 124,
+				"y": 32,
 				"w": 23,
 				"h": 23
 			},
@@ -422,8 +582,8 @@
 		},
 		"man-blue-die-6.png": {
 			"frame": {
-				"x": 23,
-				"y": 39,
+				"x": 147,
+				"y": 32,
 				"w": 23,
 				"h": 23
 			},
@@ -442,8 +602,8 @@
 		},
 		"man-blue-die-7.png": {
 			"frame": {
-				"x": 46,
-				"y": 39,
+				"x": 0,
+				"y": 55,
 				"w": 23,
 				"h": 23
 			},
@@ -462,8 +622,8 @@
 		},
 		"man-blue-move-down.png": {
 			"frame": {
-				"x": 69,
-				"y": 39,
+				"x": 23,
+				"y": 55,
 				"w": 23,
 				"h": 23
 			},
@@ -482,8 +642,8 @@
 		},
 		"man-blue-move-down-anim-1.png": {
 			"frame": {
-				"x": 92,
-				"y": 39,
+				"x": 46,
+				"y": 55,
 				"w": 23,
 				"h": 23
 			},
@@ -502,8 +662,8 @@
 		},
 		"man-blue-move-down-anim-2.png": {
 			"frame": {
-				"x": 115,
-				"y": 39,
+				"x": 69,
+				"y": 55,
 				"w": 23,
 				"h": 23
 			},
@@ -522,8 +682,8 @@
 		},
 		"man-blue-move-left.png": {
 			"frame": {
-				"x": 138,
-				"y": 39,
+				"x": 92,
+				"y": 55,
 				"w": 23,
 				"h": 23
 			},
@@ -542,8 +702,8 @@
 		},
 		"man-blue-move-left-anim-1.png": {
 			"frame": {
-				"x": 0,
-				"y": 62,
+				"x": 115,
+				"y": 55,
 				"w": 23,
 				"h": 23
 			},
@@ -562,8 +722,8 @@
 		},
 		"man-blue-move-left-anim-2.png": {
 			"frame": {
-				"x": 23,
-				"y": 62,
+				"x": 138,
+				"y": 55,
 				"w": 23,
 				"h": 23
 			},
@@ -582,8 +742,8 @@
 		},
 		"man-blue-move-right.png": {
 			"frame": {
-				"x": 46,
-				"y": 62,
+				"x": 0,
+				"y": 78,
 				"w": 23,
 				"h": 23
 			},
@@ -602,8 +762,8 @@
 		},
 		"man-blue-move-right-anim-1.png": {
 			"frame": {
-				"x": 69,
-				"y": 62,
+				"x": 23,
+				"y": 78,
 				"w": 23,
 				"h": 23
 			},
@@ -622,8 +782,8 @@
 		},
 		"man-blue-move-right-anim-2.png": {
 			"frame": {
-				"x": 92,
-				"y": 62,
+				"x": 46,
+				"y": 78,
 				"w": 23,
 				"h": 23
 			},
@@ -642,8 +802,8 @@
 		},
 		"man-blue-move-up.png": {
 			"frame": {
-				"x": 115,
-				"y": 62,
+				"x": 69,
+				"y": 78,
 				"w": 23,
 				"h": 23
 			},
@@ -662,8 +822,8 @@
 		},
 		"man-blue-move-up-anim-1.png": {
 			"frame": {
-				"x": 138,
-				"y": 62,
+				"x": 92,
+				"y": 78,
 				"w": 23,
 				"h": 23
 			},
@@ -682,8 +842,8 @@
 		},
 		"man-blue-move-up-anim-2.png": {
 			"frame": {
-				"x": 0,
-				"y": 85,
+				"x": 115,
+				"y": 78,
 				"w": 23,
 				"h": 23
 			},
@@ -702,8 +862,8 @@
 		},
 		"man-red-die-1.png": {
 			"frame": {
-				"x": 23,
-				"y": 85,
+				"x": 138,
+				"y": 78,
 				"w": 23,
 				"h": 23
 			},
@@ -722,8 +882,8 @@
 		},
 		"man-red-die-2.png": {
 			"frame": {
-				"x": 46,
-				"y": 85,
+				"x": 0,
+				"y": 101,
 				"w": 23,
 				"h": 23
 			},
@@ -742,8 +902,8 @@
 		},
 		"man-red-die-3.png": {
 			"frame": {
-				"x": 69,
-				"y": 85,
+				"x": 23,
+				"y": 101,
 				"w": 23,
 				"h": 23
 			},
@@ -762,8 +922,8 @@
 		},
 		"man-red-die-4.png": {
 			"frame": {
-				"x": 92,
-				"y": 85,
+				"x": 46,
+				"y": 101,
 				"w": 23,
 				"h": 23
 			},
@@ -782,8 +942,8 @@
 		},
 		"man-red-die-5.png": {
 			"frame": {
-				"x": 115,
-				"y": 85,
+				"x": 69,
+				"y": 101,
 				"w": 23,
 				"h": 23
 			},
@@ -802,8 +962,8 @@
 		},
 		"man-red-die-6.png": {
 			"frame": {
-				"x": 138,
-				"y": 85,
+				"x": 92,
+				"y": 101,
 				"w": 23,
 				"h": 23
 			},
@@ -822,8 +982,8 @@
 		},
 		"man-red-die-7.png": {
 			"frame": {
-				"x": 0,
-				"y": 108,
+				"x": 115,
+				"y": 101,
 				"w": 23,
 				"h": 23
 			},
@@ -842,8 +1002,8 @@
 		},
 		"man-red-move-down.png": {
 			"frame": {
-				"x": 23,
-				"y": 108,
+				"x": 138,
+				"y": 101,
 				"w": 23,
 				"h": 23
 			},
@@ -862,8 +1022,8 @@
 		},
 		"man-red-move-down-anim-1.png": {
 			"frame": {
-				"x": 46,
-				"y": 108,
+				"x": 0,
+				"y": 124,
 				"w": 23,
 				"h": 23
 			},
@@ -882,8 +1042,8 @@
 		},
 		"man-red-move-down-anim-2.png": {
 			"frame": {
-				"x": 69,
-				"y": 108,
+				"x": 23,
+				"y": 124,
 				"w": 23,
 				"h": 23
 			},
@@ -902,8 +1062,8 @@
 		},
 		"man-red-move-left.png": {
 			"frame": {
-				"x": 92,
-				"y": 108,
+				"x": 46,
+				"y": 124,
 				"w": 23,
 				"h": 23
 			},
@@ -922,8 +1082,8 @@
 		},
 		"man-red-move-left-anim-1.png": {
 			"frame": {
-				"x": 115,
-				"y": 108,
+				"x": 69,
+				"y": 124,
 				"w": 23,
 				"h": 23
 			},
@@ -942,8 +1102,8 @@
 		},
 		"man-red-move-left-anim-2.png": {
 			"frame": {
-				"x": 138,
-				"y": 108,
+				"x": 92,
+				"y": 124,
 				"w": 23,
 				"h": 23
 			},
@@ -962,8 +1122,8 @@
 		},
 		"man-red-move-right.png": {
 			"frame": {
-				"x": 0,
-				"y": 131,
+				"x": 115,
+				"y": 124,
 				"w": 23,
 				"h": 23
 			},
@@ -982,8 +1142,8 @@
 		},
 		"man-red-move-right-anim-1.png": {
 			"frame": {
-				"x": 23,
-				"y": 131,
+				"x": 138,
+				"y": 124,
 				"w": 23,
 				"h": 23
 			},
@@ -1002,8 +1162,8 @@
 		},
 		"man-red-move-right-anim-2.png": {
 			"frame": {
-				"x": 46,
-				"y": 131,
+				"x": 0,
+				"y": 147,
 				"w": 23,
 				"h": 23
 			},
@@ -1022,8 +1182,8 @@
 		},
 		"man-red-move-up.png": {
 			"frame": {
-				"x": 69,
-				"y": 131,
+				"x": 23,
+				"y": 147,
 				"w": 23,
 				"h": 23
 			},
@@ -1042,8 +1202,8 @@
 		},
 		"man-red-move-up-anim-1.png": {
 			"frame": {
-				"x": 92,
-				"y": 131,
+				"x": 46,
+				"y": 147,
 				"w": 23,
 				"h": 23
 			},
@@ -1062,8 +1222,8 @@
 		},
 		"man-red-move-up-anim-2.png": {
 			"frame": {
-				"x": 115,
-				"y": 131,
+				"x": 69,
+				"y": 147,
 				"w": 23,
 				"h": 23
 			},
@@ -1078,52 +1238,12 @@
 			"sourceSize": {
 				"w": 23,
 				"h": 23
-			}
-		},
-		"powerup-bomb-explode.png": {
-			"frame": {
-				"x": 138,
-				"y": 131,
-				"w": 16,
-				"h": 16
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 16,
-				"h": 16
-			},
-			"sourceSize": {
-				"w": 16,
-				"h": 16
-			}
-		},
-		"powerup-bomb-reserve.png": {
-			"frame": {
-				"x": 154,
-				"y": 131,
-				"w": 16,
-				"h": 16
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 16,
-				"h": 16
-			},
-			"sourceSize": {
-				"w": 16,
-				"h": 16
 			}
 		},
 		"tile_set1brick-explode1.png": {
 			"frame": {
-				"x": 138,
-				"y": 147,
+				"x": 161,
+				"y": 55,
 				"w": 16,
 				"h": 16
 			},
@@ -1142,8 +1262,8 @@
 		},
 		"tile_set1brick-explode2.png": {
 			"frame": {
-				"x": 154,
-				"y": 147,
+				"x": 161,
+				"y": 71,
 				"w": 16,
 				"h": 16
 			},
@@ -1162,8 +1282,8 @@
 		},
 		"tile_set1brick-explode3.png": {
 			"frame": {
-				"x": 176,
-				"y": 0,
+				"x": 161,
+				"y": 87,
 				"w": 16,
 				"h": 16
 			},
@@ -1182,8 +1302,8 @@
 		},
 		"tile_set1brick-explode4.png": {
 			"frame": {
-				"x": 172,
-				"y": 16,
+				"x": 161,
+				"y": 103,
 				"w": 16,
 				"h": 16
 			},
@@ -1202,8 +1322,8 @@
 		},
 		"tile_set1brick-explode5.png": {
 			"frame": {
-				"x": 172,
-				"y": 32,
+				"x": 161,
+				"y": 119,
 				"w": 16,
 				"h": 16
 			},
@@ -1223,7 +1343,7 @@
 		"tile_set1brick-explode6.png": {
 			"frame": {
 				"x": 161,
-				"y": 48,
+				"y": 135,
 				"w": 16,
 				"h": 16
 			},
@@ -1242,8 +1362,8 @@
 		},
 		"tile_set2brick-explode1.png": {
 			"frame": {
-				"x": 161,
-				"y": 64,
+				"x": 92,
+				"y": 151,
 				"w": 16,
 				"h": 15
 			},
@@ -1262,8 +1382,8 @@
 		},
 		"tile_set2brick-explode2.png": {
 			"frame": {
-				"x": 161,
-				"y": 79,
+				"x": 108,
+				"y": 151,
 				"w": 16,
 				"h": 16
 			},
@@ -1282,8 +1402,8 @@
 		},
 		"tile_set2brick-explode3.png": {
 			"frame": {
-				"x": 161,
-				"y": 95,
+				"x": 124,
+				"y": 151,
 				"w": 16,
 				"h": 16
 			},
@@ -1302,8 +1422,8 @@
 		},
 		"tile_set2brick-explode4.png": {
 			"frame": {
-				"x": 161,
-				"y": 111,
+				"x": 140,
+				"y": 151,
 				"w": 16,
 				"h": 16
 			},
@@ -1322,8 +1442,8 @@
 		},
 		"tile_set2brick-explode5.png": {
 			"frame": {
-				"x": 170,
-				"y": 127,
+				"x": 156,
+				"y": 151,
 				"w": 16,
 				"h": 16
 			},
@@ -1342,8 +1462,8 @@
 		},
 		"tile_set2brick-explode6.png": {
 			"frame": {
-				"x": 170,
-				"y": 143,
+				"x": 176,
+				"y": 0,
 				"w": 16,
 				"h": 16
 			},
@@ -1362,8 +1482,8 @@
 		},
 		"tile_set3brick-explode1.png": {
 			"frame": {
-				"x": 0,
-				"y": 159,
+				"x": 176,
+				"y": 16,
 				"w": 16,
 				"h": 16
 			},
@@ -1382,8 +1502,8 @@
 		},
 		"tile_set3brick-explode2.png": {
 			"frame": {
-				"x": 16,
-				"y": 159,
+				"x": 170,
+				"y": 32,
 				"w": 16,
 				"h": 16
 			},
@@ -1402,8 +1522,8 @@
 		},
 		"tile_set3brick-explode3.png": {
 			"frame": {
-				"x": 32,
-				"y": 159,
+				"x": 177,
+				"y": 48,
 				"w": 16,
 				"h": 16
 			},
@@ -1422,8 +1542,8 @@
 		},
 		"tile_set3brick-explode4.png": {
 			"frame": {
-				"x": 48,
-				"y": 159,
+				"x": 177,
+				"y": 64,
 				"w": 16,
 				"h": 16
 			},
@@ -1442,8 +1562,8 @@
 		},
 		"tile_set3brick-explode5.png": {
 			"frame": {
-				"x": 64,
-				"y": 159,
+				"x": 177,
+				"y": 80,
 				"w": 16,
 				"h": 16
 			},
@@ -1462,8 +1582,8 @@
 		},
 		"tile_set3brick-explode6.png": {
 			"frame": {
-				"x": 80,
-				"y": 159,
+				"x": 177,
+				"y": 96,
 				"w": 16,
 				"h": 16
 			},
@@ -1482,8 +1602,8 @@
 		},
 		"tile_set4brick-explode1.png": {
 			"frame": {
-				"x": 96,
-				"y": 159,
+				"x": 177,
+				"y": 112,
 				"w": 16,
 				"h": 16
 			},
@@ -1502,8 +1622,8 @@
 		},
 		"tile_set4brick-explode2.png": {
 			"frame": {
-				"x": 112,
-				"y": 159,
+				"x": 177,
+				"y": 128,
 				"w": 16,
 				"h": 16
 			},
@@ -1522,8 +1642,8 @@
 		},
 		"tile_set4brick-explode3.png": {
 			"frame": {
-				"x": 170,
-				"y": 159,
+				"x": 177,
+				"y": 144,
 				"w": 16,
 				"h": 16
 			},
@@ -1542,8 +1662,8 @@
 		},
 		"tile_set4brick-explode4.png": {
 			"frame": {
-				"x": 0,
-				"y": 175,
+				"x": 172,
+				"y": 160,
 				"w": 16,
 				"h": 16
 			},
@@ -1562,8 +1682,8 @@
 		},
 		"tile_set4brick-explode5.png": {
 			"frame": {
-				"x": 16,
-				"y": 175,
+				"x": 0,
+				"y": 176,
 				"w": 16,
 				"h": 16
 			},
@@ -1582,8 +1702,8 @@
 		},
 		"tile_set4brick-explode6.png": {
 			"frame": {
-				"x": 32,
-				"y": 175,
+				"x": 16,
+				"y": 176,
 				"w": 16,
 				"h": 15
 			},
@@ -1607,8 +1727,8 @@
 		"image": "spritesheet.png",
 		"format": "RGBA8888",
 		"size": {
-			"w": 192,
-			"h": 191
+			"w": 193,
+			"h": 192
 		},
 		"scale": "1"
 	}

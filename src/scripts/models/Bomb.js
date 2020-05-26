@@ -1,5 +1,4 @@
 import config from '../config';
-import utils from '../utils';
 
 export default class Bomb extends Phaser.Physics.Arcade.Sprite {
     static #animsLoaded = false;
@@ -26,7 +25,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         const tile = player.getTile();
         tile.setData('bomb', this);
 
-        this.setData('explodeTilesAround', this.player.explodeTilesAround);
+        this.setData('bombPower', this.player.bombPower);
         this.setData('tile', tile);
         
         this.level.addBomb(this);
@@ -34,13 +33,13 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         this.scene.sounds.bombPlace.play({delay: 0.05});
 
         this._addAnims();
-        this.anims.play("bomb-pending", true);
+        this.play("bomb-pending", true);
         this.once('animationcomplete', this.explode);
 
         this.fireGroup = this.scene.add.group();
-        this.wallDestructingGroup = this.scene.add.group();
+        this.destructingGroup = this.scene.add.group();
 
-        this.scene.physics.add.collider(this.level.players, this.wallDestructingGroup);
+        this.scene.physics.add.collider(this.level.players, this.destructingGroup);
     }
 
     _createExplodeFireSprite(x, y, dir) {
@@ -77,19 +76,27 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         wallDestruct.body.setOffset(config.tileSize);
         const tileSetId = tile.properties.tile_set_id;
 
-        this.wallDestructingGroup.add(wallDestruct);
+        this.destructingGroup.add(wallDestruct);
 
-        const bonusUnderTile = (1 == utils.rand(1,10));
-        if (bonusUnderTile) {
-            this.level.createBonus(tile.x, tile.y, 'fire');    
+        const dropped = this.level.dropBonusIfNeed(tile);
+        if (dropped) {
             wallDestruct.visible = false;
         }
+        
         this.level.map.replaceTile(tile, {name: 'ground', tile_set_id: tileSetId});
 
-        wallDestruct.anims.play(`brick-destroy-tileset${tileSetId}`);
+        wallDestruct.play(`brick-destroy-tileset${tileSetId}`);
         wallDestruct.once('animationcomplete', () => {
             wallDestruct.destroy();
         });
+    }
+
+    _bonusDestroy(bonus) {
+        bonus.play(`bonus-explode`);
+        bonus.once('animationcomplete', () => {
+            bonus.getData('tile').removeData('bonus')
+            bonus.destroy();
+        });   
     }
 
     explode() {
@@ -98,7 +105,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         }
         this.explodeStarted = true;
         // get inforamtion for explosion
-        const explodeTilesAround = this.player.explodeTilesAround;
+        const bombPower = this.player.bombPower;
         const explodeTileXY = {x: this.x, y: this.y};
 
         
@@ -125,8 +132,8 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
 
                
         const stopExplode = {top: false, bottom: false, left: false, right: false};
-        for (let i = 1; i <= explodeTilesAround; i++) {
-            const tail = explodeTilesAround == i;
+        for (let i = 1; i <= bombPower; i++) {
+            const tail = bombPower == i;
 
             const explodeXYs = {
                 top: {
@@ -165,7 +172,8 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
             if (! stopExplode.top && explodeXYs.top.tile) {
                 if (!noExplodeTileNames.includes(explodeXYs.top.tile.properties.name) 
                     && !explodeXYs.top.tile.getData('bomb-fire-center')
-                    && !explodeXYs.top.tile.getData('bomb')) {
+                    && !explodeXYs.top.tile.getData('bomb')
+                    && !explodeXYs.top.tile.getData('bonus')) {
                     explodeSprites.push({
                         // top
                         dir: 'top',
@@ -174,6 +182,9 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                         tile: explodeXYs.top.tile
                     });
                 } else {
+                    if (explodeXYs.top.tile.getData('bonus')) {
+                        this._bonusDestroy(explodeXYs.top.tile.getData('bonus'));
+                    }
                     if (explodeXYs.top.tile.properties.name === 'bricks') {
                         this._wallDestroy(explodeXYs.top.tile);
                     }
@@ -195,7 +206,8 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
             if (! stopExplode.bottom && explodeXYs.bottom.tile) {
                 if (!noExplodeTileNames.includes(explodeXYs.bottom.tile.properties.name)
                     && !explodeXYs.bottom.tile.getData('bomb-fire-center')
-                    && !explodeXYs.bottom.tile.getData('bomb')) {
+                    && !explodeXYs.bottom.tile.getData('bomb')
+                    && !explodeXYs.bottom.tile.getData('bonus')) {
                     explodeSprites.push({
                         // bottom
                         dir: 'bottom',
@@ -204,6 +216,9 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                         tile: explodeXYs.bottom.tile
                     });
                 } else {
+                    if (explodeXYs.bottom.tile.getData('bonus')) {
+                        this._bonusDestroy(explodeXYs.bottom.tile.getData('bonus'));
+                    }
                     if (explodeXYs.bottom.tile.properties.name === 'bricks') {
                         this._wallDestroy(explodeXYs.bottom.tile);
                     }
@@ -223,7 +238,8 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
             if (! stopExplode.left && explodeXYs.left.tile) {
                 if (!noExplodeTileNames.includes(explodeXYs.left.tile.properties.name)
                     && !explodeXYs.left.tile.getData('bomb-fire-center')
-                    && !explodeXYs.left.tile.getData('bomb')) {
+                    && !explodeXYs.left.tile.getData('bomb')
+                    && !explodeXYs.left.tile.getData('bonus')) {
                     explodeSprites.push({
                         // left
                         dir: 'left',
@@ -232,6 +248,9 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                         tile: explodeXYs.left.tile
                     });
                 } else {
+                    if (explodeXYs.left.tile.getData('bonus')) {
+                        this._bonusDestroy(explodeXYs.left.tile.getData('bonus'));
+                    }
                     if (explodeXYs.left.tile.properties.name === 'bricks') {
                         this._wallDestroy(explodeXYs.left.tile);
                     }
@@ -249,10 +268,12 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                 }
             }
 
+
             if (! stopExplode.right && explodeXYs.right.tile) {
                 if (!noExplodeTileNames.includes(explodeXYs.right.tile.properties.name)
                     && !explodeXYs.right.tile.getData('bomb-fire-center')
-                    && !explodeXYs.right.tile.getData('bomb')) {     
+                    && !explodeXYs.right.tile.getData('bomb')
+                    && !explodeXYs.right.tile.getData('bonus')) {     
                     explodeSprites.push({
                         // right
                         dir: 'right',
@@ -261,6 +282,9 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                         tile: explodeXYs.right.tile
                     });
                 } else {
+                    if (explodeXYs.right.tile.getData('bonus')) {
+                        this._bonusDestroy(explodeXYs.right.tile.getData('bonus'));
+                    }
                     if (explodeXYs.right.tile.properties.name === 'bricks') {
                         this._wallDestroy(explodeXYs.right.tile);
                     }
@@ -295,7 +319,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
                 explodeSprite.tile.setData('bomb-fire', true);
             }
             
-            explodeSprite.sprite.anims.play(explodeSprite.anim);
+            explodeSprite.sprite.play(explodeSprite.anim);
             explodeSprite.sprite.once('animationcomplete', () => {
                 explodeSprite.sprite.destroy();
             });

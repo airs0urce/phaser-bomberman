@@ -6,7 +6,6 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     tile = null;
     speed = 68;
     keyADownLastState = false;
-    explodeTilesAround = 2;
     level = null;
     scene = null;
     handleMovements = true;
@@ -16,6 +15,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     gamepadIndex = 0;
     type = 'blue';
+
+    bombPower = 2;
+    bombsMax = 2;
 
     constructor(level, x, y, type = 'blue') {
         super(level.scene, x, y, 'atlas', `man-${type}-move-down.png`);
@@ -104,7 +106,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this._updateTile();
         this._updateMovements();
         this._updateCollisionSliding();
-        this._updateAddBomb();
+        this._updateDropBomb();
     }
 
     die() {
@@ -116,7 +118,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.handleMovements = false;
         this.scene.sounds.playerDie.play();
         this.body.stop();
-        this.anims.play(`man-${this.type}-die`, true);
+        this.play(`man-${this.type}-die`, true);
         this.once(`animationcomplete-man-${this.type}-die`, (currentAnim, currentFrame, sprite) => {
             sprite.destroy();
         })
@@ -148,13 +150,13 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Movement animations
         if (this.pressed.left) {
-            this.anims.play(`man-${this.type}-left-walk`, true);
+            this.play(`man-${this.type}-left-walk`, true);
         } else if (this.pressed.right) {
-            this.anims.play(`man-${this.type}-right-walk`, true);
+            this.play(`man-${this.type}-right-walk`, true);
         } else if (this.pressed.up) {
-            this.anims.play(`man-${this.type}-up-walk`, true);
+            this.play(`man-${this.type}-up-walk`, true);
         } else if (this.pressed.down) {
-            this.anims.play(`man-${this.type}-down-walk`, true);
+            this.play(`man-${this.type}-down-walk`, true);
         } else {
             if (this.anims.currentAnim) {
                 this.anims.setCurrentFrame(this.anims.currentAnim.frames[0]);
@@ -234,8 +236,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
-    _updateAddBomb() {
-        
+    _updateDropBomb() {
         // don't add bombs to other tiles when player moves with pressed A
         if (this.keyADownLastState == this.pressed.placeBomb) {
             return;
@@ -248,10 +249,19 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         const tileUnderPlayer = this.getTile();
         
-        // don't add bomb if there is alredy one
+        // don't add bomb if there is already one
         if (tileUnderPlayer.getData('bomb')) {
             return;
         }
+
+        // this.bombsMax
+        const userBombs = this.level.bombs.getChildren().filter((bomb) => {
+            return bomb.player == this && !bomb.explodeStarted;
+        });
+        if (userBombs.length >= this.bombsMax) {
+            return;
+        }
+
 
         // add a bomb
         const bomb = new Bomb(
