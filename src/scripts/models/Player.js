@@ -35,8 +35,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setDepth(10);
 
         this._addAnims();     
-
-        this.setPipeline('Light2D');   
     }
 
     setGamepadIndex(index) {
