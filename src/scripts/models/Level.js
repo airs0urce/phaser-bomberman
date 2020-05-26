@@ -41,6 +41,12 @@ module.exports = class Level  {
         
         this.players.add(player);
 
+
+        player.once('die', () => {
+            this.scene.restart();
+        });
+
+
         return player;
     }
 

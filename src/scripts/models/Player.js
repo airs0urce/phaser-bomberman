@@ -34,7 +34,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setDisplayOrigin(4, 5);
         this.setDepth(10);
 
-        this._addAnims();        
+        this._addAnims();     
+
+        this.setPipeline('Light2D');   
     }
 
     setGamepadIndex(index) {
@@ -116,8 +118,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.sounds.playerDie.play();
         this.body.stop();
         this.play(`man-${this.type}-die`, true);
-        this.once(`animationcomplete-man-${this.type}-die`, (currentAnim, currentFrame, sprite) => {
-            sprite.destroy();
+        this.once(`animationcomplete-man-${this.type}-die`, (currentAnim, currentFrame) => {
+            this.emit('die');
+            this.destroy();
         })
 
     }

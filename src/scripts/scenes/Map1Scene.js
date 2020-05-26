@@ -14,11 +14,13 @@ module.exports = class Map1Scene extends Phaser.Scene {
         this.inputs = {};
         this.sounds = {};        
         this.keyALastState = false;
+
+        
     }
 
     preload() {
         // Level
-        this.load.audio('titleTrack', [__dirname + 'src/assets/audio/all/3 - Track 3.mp3']);
+        this.load.audio('titleTrack', [__dirname + 'src/assets/audio/track_8.mp3']);
         this.load.atlas('atlas', __dirname + 'src/assets/images/atlas.png', __dirname + 'src/assets/images/atlas.json');
         this.load.tilemapTiledJSON("map3", __dirname + "src/maps/map3.json");
         
@@ -35,7 +37,6 @@ module.exports = class Map1Scene extends Phaser.Scene {
     }
 
     create() {
-
         this.sound.pauseOnBlur = false;
 
         this.inputs = {
@@ -58,9 +59,7 @@ module.exports = class Map1Scene extends Phaser.Scene {
         this.level = new Level(this, 'map3');
         this.players = this.add.group();
 
-
-
-        // this.players.add(this.level.addPlayer(1, 2, 'red').setGamepadIndex(0));
+        this.players.add(this.level.addPlayer(13, 11, 'red').setGamepadIndex(0));
         this.players.add(this.level.addPlayer(1, 1, 'blue').setGamepadIndex(1));
 
         // const debugGraphics = this.add.graphics().setAlpha(0.75);
@@ -73,6 +72,11 @@ module.exports = class Map1Scene extends Phaser.Scene {
         this.players.getChildren().forEach((player) => {
             player.update();
         })
+    }
+
+    restart() {
+        this.sound.stopAll()
+        this.scene.restart();
     }
 
     
