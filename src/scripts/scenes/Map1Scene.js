@@ -1,37 +1,35 @@
-import Level from "../models/Level";
-import Player from "../models/Player";
-import Bomb from "../models/Bomb";
-import _ from "underscore";
-import config from '../config';
+const Level = require("../models/Level");
+const Player = require("../models/Player");
+const Bomb = require("../models/Bomb");
+const _ = require("underscore");
+const config = require('../config');
 
 const intersects = Phaser.Geom.Intersects.RectangleToRectangle;
 const tileSize = 16;
 
-export class Map1Scene extends Phaser.Scene {
-
-    inputs = {};
-    sounds = {};
+module.exports = class Map1Scene extends Phaser.Scene {
 
     constructor() {
         super('Map1');
-        
+        this.inputs = {};
+        this.sounds = {};        
         this.keyALastState = false;
     }
 
     preload() {
         // Level
-        this.load.audio('titleTrack', ['src/assets/audio/all/3 - Track 3.mp3']);
-        this.load.atlas('atlas', 'src/assets/images/atlas.png', 'src/assets/images/atlas.json');
-        this.load.tilemapTiledJSON("map3", "src/maps/map3.json");
+        this.load.audio('titleTrack', [__dirname + 'src/assets/audio/all/3 - Track 3.mp3']);
+        this.load.atlas('atlas', __dirname + 'src/assets/images/atlas.png', __dirname + 'src/assets/images/atlas.json');
+        this.load.tilemapTiledJSON("map3", __dirname + "src/maps/map3.json");
         
 
         // Bomb
-        this.load.audio('bomb-explode', ['src/assets/audio/bomb-explode.mp3']);
-        this.load.audio('bomb-place', ['src/assets/audio/bomb-place.mp3']);
+        this.load.audio('bomb-explode', [__dirname + 'src/assets/audio/bomb-explode.mp3']);
+        this.load.audio('bomb-place', [__dirname + 'src/assets/audio/bomb-place.mp3']);
 
         // PLayer
-        this.load.audio('player-die', ['src/assets/audio/player-die.mp3']);
-        this.load.audio('player-took-bonus', ['src/assets/audio/player-took-bonus.mp3']);
+        this.load.audio('player-die', [__dirname + 'src/assets/audio/player-die.mp3']);
+        this.load.audio('player-took-bonus', [__dirname + 'src/assets/audio/player-took-bonus.mp3']);
         
         
     }

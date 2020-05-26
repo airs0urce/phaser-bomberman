@@ -1,18 +1,14 @@
-import Player from './Player';
-import config from '../config';
-import utils from '../utils';
-import * as _ from 'lodash';
+const Player = require('./Player');
+const config = require('../config');
+const utils = require('../utils');
+const _ = require('lodash');
 
-export default class Level  {
-    static #animsLoaded = false;
-    players = [];
-    static #bonusOverlapPx = 6;
+let animsLoaded = false;
+let bonusOverlapPx = 6;
 
-    bombs = null;
-    bonuses = null;
+module.exports = class Level  {
 
     constructor(scene, x, y) {
-        
         this.scene = scene;
         this.map = this.scene.make.tilemap({key: 'map3'});
         this.groundLayer =  this.map.createDynamicLayer(
@@ -27,8 +23,11 @@ export default class Level  {
 
         this.bombs = scene.add.group();
         this.bonuses = scene.add.group();
+        this.players = scene.add.group();
+
         this._addAnims();
         this._addBonusesOnMap();
+        this._addPlayerColliders();
     }
 
 
@@ -39,9 +38,8 @@ export default class Level  {
             tileY * config.tileSize,
             type
         );
-        this._addPlayerColliders(player);
-
-        this.players.push(player);
+        
+        this.players.add(player);
 
         return player;
     }
@@ -76,12 +74,12 @@ export default class Level  {
         bonus.body.setSize(config.tileSize, config.tileSize);
         bonus.body.setOffset(0, 0);
         bonus.body.setSize(
-            config.tileSize - Level.#bonusOverlapPx*2, 
-            config.tileSize - Level.#bonusOverlapPx*2
+            config.tileSize - bonusOverlapPx*2, 
+            config.tileSize - bonusOverlapPx*2
         );
         bonus.body.setOffset(
-            Level.#bonusOverlapPx, 
-            Level.#bonusOverlapPx
+            bonusOverlapPx, 
+            bonusOverlapPx
         );
 
         bonus.setData('tile', tile);        
@@ -123,10 +121,10 @@ export default class Level  {
         
     }
 
-    _addPlayerColliders(player) {
-        this.scene.physics.add.collider(player, this.groundLayer);
-        this.scene.physics.add.collider(player, this.bombs);
-        this.scene.physics.add.overlap(player, this.bombs, (player, bomb) => {
+    _addPlayerColliders() {
+        this.scene.physics.add.collider(this.players, this.groundLayer);
+        this.scene.physics.add.collider(this.players, this.bombs);
+        this.scene.physics.add.overlap(this.players, this.bombs, (player, bomb) => {
             const blockOnDistance = 8;
 
             const pX = player.body.center.x;
@@ -145,7 +143,7 @@ export default class Level  {
             }
         });
 
-        this.scene.physics.add.overlap(player, this.bonuses, (player, bonus) => {
+        this.scene.physics.add.overlap(this.players, this.bonuses, (player, bonus) => {
             if (bonus.getData('type') == 'bonus-bomb-power') {
                 player.bombPower += 1;
             } else if (bonus.getData('type') == 'bonus-bomb-count') {
@@ -159,10 +157,10 @@ export default class Level  {
 
     _addAnims() {
         
-        if (Level.#animsLoaded) {
+        if (animsLoaded) {
             return;
         }
-        Level.#animsLoaded = true;
+        animsLoaded = true;
 
         const anims = this.scene.anims;
 

@@ -1,7 +1,7 @@
 
-import * as random from 'random' ;
+const random = require('random');
 
-export default {
+module.exports =  {
     rand(min, max) {
         return random.int(min, max);
     }

@@ -1,13 +1,10 @@
-import config from '../config';
+const config = require('../config');
 
-export default class Bomb extends Phaser.Physics.Arcade.Sprite {
-    static #animsLoaded = false;
-    static #explodeSoundPlaying = 0;
-    explodeStarted = false;
-    static #safePlayerOverlapPx = 6;
-    touchingBombs = [];
-    scene = null;
-    
+let animsLoaded = false;
+let explodeSoundPlaying = 0;
+const safePlayerOverlapPx = 6;
+
+module.exports = class Bomb extends Phaser.Physics.Arcade.Sprite {
 
     constructor(player, x, y) {
         super(player.scene, x, y, 'atlas', 'bomb-pending-1.png');
@@ -18,6 +15,9 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
 
         player.scene.add.existing(this);
         player.scene.physics.add.existing(this, true)
+
+        this.explodeStarted = false;
+        this.touchingBombs = [];
 
         this.setDepth(1);
         this.setName('bomb');
@@ -30,7 +30,7 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         
         this.level.addBomb(this);
 
-        this.scene.sounds.bombPlace.play({delay: 0.05});
+        this.scene.sounds.bombPlace.play({delay: 0.02});
 
         this._addAnims();
         this.play("bomb-pending", true);
@@ -56,13 +56,13 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         sprite.setAngle(angle);        
         
         const bodySize = {
-            width: config.tileSize - Bomb.#safePlayerOverlapPx*2, 
-            height: config.tileSize - Bomb.#safePlayerOverlapPx*2
+            width: config.tileSize - safePlayerOverlapPx*2, 
+            height: config.tileSize - safePlayerOverlapPx*2
         };
         sprite.body.setSize(bodySize.width, bodySize.height);
         sprite.body.setOffset(
-            Bomb.#safePlayerOverlapPx, 
-            Bomb.#safePlayerOverlapPx
+            safePlayerOverlapPx, 
+            safePlayerOverlapPx
         );
 
         return sprite;   
@@ -109,14 +109,14 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
         const explodeTileXY = {x: this.x, y: this.y};
 
         
-        if (Bomb.#explodeSoundPlaying >= 1) {
+        if (explodeSoundPlaying >= 1) {
             this.scene.sounds.bombExplode.play({seek: 0.3});
         } else {
             this.scene.sounds.bombExplode.play({seek: 0});
         }
-        Bomb.#explodeSoundPlaying += 1;
+        explodeSoundPlaying += 1;
         this.scene.sounds.bombExplode.once('complete', () => {
-            Bomb.#explodeSoundPlaying--;
+            explodeSoundPlaying--;
         });
         
         const groundLayer = this.level.groundLayer;
@@ -358,10 +358,10 @@ export default class Bomb extends Phaser.Physics.Arcade.Sprite {
     }
 
     _addAnims() {
-        if (Bomb.#animsLoaded) {
+        if (animsLoaded) {
             return;
         }
-        Bomb.#animsLoaded = true;
+        animsLoaded = true;
 
         const anims = this.scene.anims;
 

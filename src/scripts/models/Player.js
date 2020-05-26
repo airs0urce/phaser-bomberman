@@ -1,27 +1,24 @@
-import config from '../config';
-import Bomb from './Bomb';
+const config = require('../config');
+const Bomb = require('./Bomb');
 
-export default class Player extends Phaser.Physics.Arcade.Sprite {
-    static #animsLoaded = false;
-    tile = null;
-    speed = 68;
-    keyADownLastState = false;
-    level = null;
-    scene = null;
-    handleMovements = true;
+let animsLoaded = false;
 
-    tileInitialized = false;
-    dieStarted = false;
-
-    gamepadIndex = 0;
-    type = 'blue';
-
-    bombPower = 2;
-    bombsMax = 2;
-
+class Player extends Phaser.Physics.Arcade.Sprite {
+    
     constructor(level, x, y, type = 'blue') {
         super(level.scene, x, y, 'atlas', `man-${type}-move-down.png`);
         this.type = type;
+
+        this.tile = null;
+        this.speed = 68;
+        this.keyADownLastState = false;
+
+        this.handleMovements = true;
+        this.tileInitialized = false;
+        this.dieStarted = false;
+        this.gamepadIndex = 0;
+        this.bombPower = 2;
+        this.bombsMax = 2;
 
         this.level = level;
         this.scene = level.scene;        
@@ -37,7 +34,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.setDisplayOrigin(4, 5);
         this.setDepth(10);
 
-        this._addAnims();
+        this._addAnims();        
     }
 
     setGamepadIndex(index) {
@@ -273,10 +270,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     _addAnims() {
         
-        if (Player.#animsLoaded) {
+        if (animsLoaded) {
             return;
         }
-        Player.#animsLoaded = true;
+        animsLoaded = true;
 
         const anims = this.scene.anims;
 
@@ -346,3 +343,5 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
 }
+
+module.exports = Player;

@@ -1,4 +1,4 @@
-export default function(Phaser) {
+module.exports = function(Phaser) {
 
     // add data management to Tile object
     Phaser.Tilemaps.Tile.prototype.setData = function(key, value) {

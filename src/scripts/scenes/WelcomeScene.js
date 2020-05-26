@@ -1,6 +1,6 @@
 let groundLayer;
 
-export class WelcomeScene extends Phaser.Scene {
+module.exports = class WelcomeScene extends Phaser.Scene {
     constructor() {
         super('Welcome');
     }

@@ -1,7 +1,7 @@
-import * as Phaser from "phaser";
-import {WelcomeScene} from "./scenes/WelcomeScene";
-import {Map1Scene} from "./scenes/Map1Scene";
-import modifyPhaser from "./modifyPhaser";
+const Phaser = require("phaser");
+const WelcomeScene = require("./scenes/WelcomeScene");
+const Map1Scene = require("./scenes/Map1Scene");
+const modifyPhaser = require("./modifyPhaser");
 
 modifyPhaser(Phaser);
 
@@ -10,7 +10,7 @@ var config = {
     width: 240,
     height: 208,
     pixelArt: true,
-    zoom: 3.2,
+    zoom: 3.6,
     backgroundColor: "#000",
     input: {
         gamepad: true
@@ -27,8 +27,8 @@ var config = {
 
 const game = new Phaser.Game(config);
 
-game.sound.volume = 0;
-// game.sound.volume = 0.5;
+// game.sound.volume = 0;
+game.sound.volume = 1;
 
 
 
