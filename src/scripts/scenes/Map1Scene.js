@@ -32,7 +32,8 @@ module.exports = class Map1Scene extends Phaser.Scene {
         // PLayer
         this.load.audio('player-die', [__dirname + 'src/assets/audio/player-die.mp3']);
         this.load.audio('player-took-bonus', [__dirname + 'src/assets/audio/player-took-bonus.mp3']);
-        
+
+        this.load.audio('vs-game-finish', [__dirname + 'src/assets/audio/vs-game-finish.mp3']);
         
     }
 
@@ -51,16 +52,18 @@ module.exports = class Map1Scene extends Phaser.Scene {
             bombPlace: this.sound.add('bomb-place').setVolume(1.4),
             playerDie: this.sound.add('player-die'),
             playerTookBonus: this.sound.add('player-took-bonus'),
+            vsGameFinish: this.sound.add('vs-game-finish'),
         }
 
-        this.sounds.titleTrack.play({loop: true});
+        this.startTitleMusic();
 
         
         this.level = new Level(this, 'map3');
         this.players = this.add.group();
 
-        this.players.add(this.level.addPlayer(13, 11, 'red').setGamepadIndex(0));
-        this.players.add(this.level.addPlayer(1, 1, 'blue').setGamepadIndex(1));
+        this.players.add(this.level.addPlayer(13, 10, 'blue').setGamepadIndex(1));
+        this.players.add(this.level.addPlayer(12, 11, 'red').setGamepadIndex(0));
+        
 
         // const debugGraphics = this.add.graphics().setAlpha(0.75);
         //   this.level.groundLayer.renderDebug(debugGraphics, {tileColor: null,collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tilesfaceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
@@ -77,6 +80,16 @@ module.exports = class Map1Scene extends Phaser.Scene {
     restart() {
         this.sound.stopAll()
         this.scene.restart();
+    }
+
+    stopTitleMusic() {
+        console.log('stop music');
+        this.sounds.titleTrack.stop();
+        
+    }
+
+    startTitleMusic() {
+        this.sounds.titleTrack.play({loop: true});
     }
 
     

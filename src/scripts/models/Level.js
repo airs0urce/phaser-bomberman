@@ -2,6 +2,7 @@ const Player = require('./Player');
 const config = require('../config');
 const utils = require('../utils');
 const _ = require('lodash');
+const a = require('awaiting');
 
 let animsLoaded = false;
 let bonusOverlapPx = 6;
@@ -28,6 +29,8 @@ module.exports = class Level  {
         this._addAnims();
         this._addBonusesOnMap();
         this._addPlayerColliders();
+
+        this.gameFinished = false;
     }
 
 
@@ -41,23 +44,65 @@ module.exports = class Level  {
         
         this.players.add(player);
 
-
-        player.once('die', () => {
-            this.scene.restart();
+        player.once('die', () => {            
+            this.players.remove(player, true, true);
+            this.handleGameFinish()
         });
-
 
         return player;
     }
 
+    async handleGameFinish() {
+        this.gameFinished = true;
+        const players = this.players.getChildren();
+
+        if (players.length == 1) {
+            // wait 1 sec to give bombs explode
+            await a.delay(1000);
+
+            this.scene.stopTitleMusic();
+
+            // if after 1 sec all players died
+            if (players.length == 0) {
+                console.log('draw');
+            } else {
+                console.log('there is winner');
+                // const lastPlayer = players[0];
+            }
+            
+            this.scene.add.text(
+                this.scene.cameras.main.centerX,
+                this.scene.cameras.main.centerY - 16,
+                'Winner Player 1!', {
+                    font: `12px Arial`,
+                    fill: '#fff'
+                })
+            .setOrigin(undefined, 0);
+            this.scene.sounds.vsGameFinish.play();
+
+            await a.delay(3000);
+
+            
+            this.scene.sounds.vsGameFinish.on('complete', () => {
+                this.scene.restart();
+            });
+        }
+    }
+
     addBomb(bomb) {
         this.bombs.add(bomb);
-
-
-        // bomb.on();
     }
 
     removeBomb(bomb) {
+        if (! this.bombs.children) {
+            // Fix for this error:
+            //
+            // Uncaught TypeError: Cannot read property 'contains' of undefined
+            // at Group.remove (webpack-internal:///./node_modules/phaser/src/gameobjects/group/Group.js:609)
+            // at Level.removeBomb (webpack-internal:///./src/scripts/models/Level.js:68)
+            // at Bomb.destroy (webpack-internal:///./src/scripts/models/Bomb.js:341)
+            return;
+        }
         this.bombs.remove(bomb, true, true);
     }
 

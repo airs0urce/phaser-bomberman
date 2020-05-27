@@ -10,6 +10,9 @@ module.exports = {
     entry: './src/scripts/index.js',
     mode: "development",
     devtool: "eval-source-map",
+    devServer: {
+        liveReload: false
+    },
     resolve: {
         extensions: ['.js']
     },

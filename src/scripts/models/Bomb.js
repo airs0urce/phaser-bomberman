@@ -33,7 +33,7 @@ module.exports = class Bomb extends Phaser.Physics.Arcade.Sprite {
         this.scene.sounds.bombPlace.play({delay: 0.02});
 
         this._addAnims();
-        this.play("bomb-pending", true);
+        this.play("bomb-pending");
         this.once('animationcomplete', this.explode);
 
         this.fireGroup = this.scene.add.group();
@@ -101,6 +101,11 @@ module.exports = class Bomb extends Phaser.Physics.Arcade.Sprite {
 
     explode() {
         if (this.explodeStarted) {
+            return;
+        }
+        if (this.level.gameFinished) {
+            // continue pending animation
+            this.play("bomb-pending-forever");
             return;
         }
         this.explodeStarted = true;
@@ -384,6 +389,27 @@ module.exports = class Bomb extends Phaser.Physics.Arcade.Sprite {
             frameRate: 4,
             repeat: 0,
         });
+
+        anims.create({
+            key: "bomb-pending-forever",
+            frames: [
+                {key: 'atlas', frame: 'bomb-pending-1.png'},
+                {key: 'atlas', frame: 'bomb-pending-2.png'},
+                {key: 'atlas', frame: 'bomb-pending-1.png'},
+                {key: 'atlas', frame: 'bomb-pending-2.png'},
+                {key: 'atlas', frame: 'bomb-pending-1.png'},
+                {key: 'atlas', frame: 'bomb-pending-3.png'},
+
+                {key: 'atlas', frame: 'bomb-pending-1.png'},
+                {key: 'atlas', frame: 'bomb-pending-2.png'},
+                {key: 'atlas', frame: 'bomb-pending-1.png'},
+                {key: 'atlas', frame: 'bomb-pending-2.png'},
+            ],
+            frameRate: 4,
+            repeat: -1,
+        });
+
+        
 
 
         const bombExplodeFrameRate = 14;
