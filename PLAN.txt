@@ -1,1 +1,11 @@
-после победы останавливать бомбы
+
+текст победы выше уровнем
+
+на пстом поле не увоить игрока в другую сторону при столкновении
+
+
+
+
+
+scene.cameras.main.fadeEffect.start(true, 1000);
+scene.cameras.main.fadeEffect.start(false, 1000);

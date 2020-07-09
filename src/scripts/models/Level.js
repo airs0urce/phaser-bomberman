@@ -11,7 +11,7 @@ module.exports = class Level  {
 
     constructor(scene, x, y) {
         this.scene = scene;
-        this.map = this.scene.make.tilemap({key: 'map3'});
+        this.map = this.scene.make.tilemap({key: 'map1'});
         this.groundLayer =  this.map.createDynamicLayer(
             'ground', 
             this.map.addTilesetImage('tileset-ground'), 
@@ -33,13 +33,13 @@ module.exports = class Level  {
         this.gameFinished = false;
     }
 
-
-    addPlayer(tileX, tileY, type = 'blue') {
+    addPlayer(tileX, tileY, type = 'blue', fullName = 'player') {
         const player = new Player(
             this, 
             tileX * config.tileSize, 
             tileY * config.tileSize,
-            type
+            type,
+            fullName
         );
         
         this.players.add(player);
@@ -63,21 +63,34 @@ module.exports = class Level  {
             this.scene.stopTitleMusic();
 
             // if after 1 sec all players died
+            let message;
             if (players.length == 0) {
-                console.log('draw');
+                message = 'Draw';
             } else {
-                console.log('there is winner');
-                // const lastPlayer = players[0];
+                const lastPlayer = players[0];
+                message = `Winner is ${lastPlayer.fullName}!`;
             }
+
             
             this.scene.add.text(
                 this.scene.cameras.main.centerX,
                 this.scene.cameras.main.centerY - 16,
-                'Winner Player 1!', {
-                    font: `12px Arial`,
-                    fill: '#fff'
+                message, 
+                {
+                    font: `16px Arial`,
+                    color: '#fff',
+                    shadow: {
+                        offsetX: 2,
+                        offsetY: 2,
+                        color: '#000',
+                        blur: 1,
+                        stroke: false,
+                        fill: true
+                    },
                 })
-            .setOrigin(undefined, 0);
+            .setOrigin(undefined, 0)
+            .setDepth(10);
+
             this.scene.sounds.vsGameFinish.play();
 
             await a.delay(3000);

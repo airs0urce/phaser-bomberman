@@ -5,9 +5,10 @@ let animsLoaded = false;
 
 class Player extends Phaser.Physics.Arcade.Sprite {
     
-    constructor(level, x, y, type = 'blue') {
+    constructor(level, x, y, type = 'blue', fullName = 'player1') {
         super(level.scene, x, y, 'atlas', `man-${type}-move-down.png`);
         this.type = type;
+        this.fullName = fullName;
 
         this.tile = null;
         this.speed = 68;
@@ -32,7 +33,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.body.setSize(config.tileSize - 1, config.tileSize);
         this.setOffset(4, 5);
         this.setDisplayOrigin(4, 5);
-        this.setDepth(10);
+        this.setDepth(5);
 
         this._addAnims();     
     }
@@ -164,55 +165,76 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     _updateCollisionSliding() {
+        
+        window.game = this.scene.game;
+
+        // this.scene.game.debug.pixel(
+        //     this.body.x, 
+        //     this.body.y, 
+        //     'red', 4
+        // );
+
         // collision sliding
         if (this.pressed.right && this.body.blocked.right) {
-            const upRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y);
-            const downRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y + config.tileSize - 1);
+            const rightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y + config.tileSize/2);
+            if (!rightTile.getData('bomb')) {
+                const upRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y);
+                const downRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize + 1, this.body.y + config.tileSize - 1);
 
-            if (!upRightTile.getData('bomb') && !downRightTile.getData('bomb')) {
-                if (upRightTile && upRightTile.properties.name == 'ground') {
-                    this.body.setVelocityY(-this.speed);
-                } else if (downRightTile && downRightTile.properties.name == 'ground') {
-                    this.body.setVelocityY(this.speed);
+                if (!upRightTile.getData('bomb') && !downRightTile.getData('bomb')) {
+                    if (upRightTile && upRightTile.properties.name == 'ground') {
+                        this.body.setVelocityY(-this.speed);
+                    } else if (downRightTile && downRightTile.properties.name == 'ground') {
+                        this.body.setVelocityY(this.speed);
+                    }
                 }
             }
-
         }
         if (this.pressed.left && this.body.blocked.left) {
-            const upLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y);
-            const downLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y + config.tileSize - 1);
-            
-            if (!upLeftTile.getData('bomb') && !downLeftTile.getData('bomb')) {
-                if (upLeftTile && upLeftTile.properties.name == 'ground') {
-                    this.body.setVelocityY(-this.speed);
-                } else if (downLeftTile && downLeftTile.properties.name == 'ground') {
-                    this.body.setVelocityY(this.speed);
+            const leftTile = this.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y + config.tileSize/2);
+            if (!leftTile.getData('bomb')) {
+                const upLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y);
+                const downLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x - 1, this.body.y + config.tileSize - 1);
+                
+                if (!upLeftTile.getData('bomb') && !downLeftTile.getData('bomb')) {
+                    if (upLeftTile && upLeftTile.properties.name == 'ground') {
+                        this.body.setVelocityY(-this.speed);
+                    } else if (downLeftTile && downLeftTile.properties.name == 'ground') {
+                        this.body.setVelocityY(this.speed);
+                    }
                 }
             }
         }
         if (this.pressed.up && this.body.blocked.up) {
-            const upLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x, this.body.y - 1);
-            const upRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y - 1);
-               
-            if (!upLeftTile.getData('bomb') && !upRightTile.getData('bomb')) {
-                if (upLeftTile && upLeftTile.properties.name == 'ground') {
-                    this.body.setVelocityX(-this.speed);
-                } else if (upRightTile && upRightTile.properties.name == 'ground') {
-                    this.body.setVelocityX(this.speed);
+            const upTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize/2, this.body.y - 1);
+            if (!upTile.getData('bomb')) {
+                const upLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x, this.body.y - 1);
+                const upRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y - 1);
+                   
+                if (!upLeftTile.getData('bomb') && !upRightTile.getData('bomb')) {
+                    if (upLeftTile && upLeftTile.properties.name == 'ground') {
+                        this.body.setVelocityX(-this.speed);
+                    } else if (upRightTile && upRightTile.properties.name == 'ground') {
+                        this.body.setVelocityX(this.speed);
+                    }
                 }
             }
         }
         if (this.pressed.down && this.body.blocked.down) {
-            const downLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x, this.body.y + config.tileSize + 1);
-            const downRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y + config.tileSize + 1);
+            const downTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize/2, this.body.y + config.tileSize + 1);
+            if (!downTile.getData('bomb')) {
+                const downLeftTile = this.groundLayer.getTileAtWorldXY(this.body.x, this.body.y + config.tileSize + 1);
+                const downRightTile = this.groundLayer.getTileAtWorldXY(this.body.x + config.tileSize - 1, this.body.y + config.tileSize + 1);
 
-            if (!downLeftTile.getData('bomb') && !downRightTile.getData('bomb')) {
-                if (downLeftTile && downLeftTile.properties.name == 'ground') {
-                    this.body.setVelocityX(-this.speed);
-                } else if (downRightTile && downRightTile.properties.name == 'ground') {
-                    this.body.setVelocityX(this.speed);
+                if (!downLeftTile.getData('bomb') && !downRightTile.getData('bomb')) {
+                    if (downLeftTile && downLeftTile.properties.name == 'ground') {
+                        this.body.setVelocityX(-this.speed);
+                    } else if (downRightTile && downRightTile.properties.name == 'ground') {
+                        this.body.setVelocityX(this.speed);
+                    }
                 }
             }
+            
         }
     }
 

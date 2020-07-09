@@ -14,15 +14,13 @@ module.exports = class Map1Scene extends Phaser.Scene {
         this.inputs = {};
         this.sounds = {};        
         this.keyALastState = false;
-
-        
     }
 
     preload() {
         // Level
         this.load.audio('titleTrack', [__dirname + 'src/assets/audio/track_8.mp3']);
         this.load.atlas('atlas', __dirname + 'src/assets/images/atlas.png', __dirname + 'src/assets/images/atlas.json');
-        this.load.tilemapTiledJSON("map3", __dirname + "src/maps/map3.json");
+        this.load.tilemapTiledJSON("map1", __dirname + "src/maps/map1.json");
         
 
         // Bomb
@@ -34,7 +32,7 @@ module.exports = class Map1Scene extends Phaser.Scene {
         this.load.audio('player-took-bonus', [__dirname + 'src/assets/audio/player-took-bonus.mp3']);
 
         this.load.audio('vs-game-finish', [__dirname + 'src/assets/audio/vs-game-finish.mp3']);
-        
+       
     }
 
     create() {
@@ -58,23 +56,46 @@ module.exports = class Map1Scene extends Phaser.Scene {
         this.startTitleMusic();
 
         
-        this.level = new Level(this, 'map3');
+        this.level = new Level(this, 'map1');
         this.players = this.add.group();
 
-        this.players.add(this.level.addPlayer(13, 10, 'blue').setGamepadIndex(1));
-        this.players.add(this.level.addPlayer(12, 11, 'red').setGamepadIndex(0));
+        const player1 = this.level.addPlayer(1, 1, 'blue', 'Anh Dima').setGamepadIndex(1);
+        const player2 = this.level.addPlayer(18, 11, 'red', 'Em Tho').setGamepadIndex(0);
+
+        this.players.add(player1);
+        this.players.add(player2);
+
+
+// this.cameras.main.startFollow(player1, true);
+
+
+// var cameraNew = this.cameras.add(0, 0, 330, 208);
+// cameraNew.setZoom(3.6);
+// cameraNew.roundPixels = true;
         
 
         // const debugGraphics = this.add.graphics().setAlpha(0.75);
         //   this.level.groundLayer.renderDebug(debugGraphics, {tileColor: null,collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tilesfaceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
         // });
         // PhaserGUIAction(this);
+
+        this.scene.launch('UIScene');
+
+        this.graphics = this.add.graphics({ fillStyle: { color: 0x2266aa } });
+        this.graphics.clear();
+        this.graphics.fillPointShape({x: 20, y: 20}, 10);
+
+
+
+
+
+        
     }
 
     update(time, delta) {
         this.players.getChildren().forEach((player) => {
             player.update();
-        })
+        });
     }
 
     restart() {
@@ -83,7 +104,6 @@ module.exports = class Map1Scene extends Phaser.Scene {
     }
 
     stopTitleMusic() {
-        console.log('stop music');
         this.sounds.titleTrack.stop();
         
     }
