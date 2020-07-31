@@ -12,7 +12,7 @@ var config = {
     height: 208,
     pixelArt: true,
     roundPixels: true,
-    zoom: 2.6,
+    zoom: 3,
     backgroundColor: "#000",
     input: {
         gamepad: true
