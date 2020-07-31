@@ -7,7 +7,8 @@ $ npm install
 $ npm run start
 ```
 
-![Screen Shot 2020-07-31 at 5 28 02 PM](https://user-images.githubusercontent.com/109203/89026685-5761e080-d353-11ea-91a8-4ec97bfc6e41.png)
+![Screen Shot 2020-07-31 at 5 32 38 PM](https://user-images.githubusercontent.com/109203/89026987-dce59080-d353-11ea-8ca5-9e92926ae623.png)
+
 
 Move character - arrow keys  
 Place a bomb - A key
