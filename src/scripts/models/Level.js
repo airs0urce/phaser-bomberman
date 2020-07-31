@@ -11,7 +11,7 @@ module.exports = class Level  {
 
     constructor(scene, x, y) {
         this.scene = scene;
-        this.map = this.scene.make.tilemap({key: 'map1'});
+        this.map = this.scene.make.tilemap({key: 'map3'});
         this.groundLayer =  this.map.createDynamicLayer(
             'ground', 
             this.map.addTilesetImage('tileset-ground'), 

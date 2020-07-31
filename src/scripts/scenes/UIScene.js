@@ -3,7 +3,9 @@ module.exports = class UIScene extends Phaser.Scene {
         super('UIScene');
     }
 
-    create() {    
+    create() {
+
+        return;    
         this.add.text(
             10,
             4,

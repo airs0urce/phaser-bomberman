@@ -20,7 +20,7 @@ module.exports = class Map1Scene extends Phaser.Scene {
         // Level
         this.load.audio('titleTrack', [__dirname + 'src/assets/audio/track_8.mp3']);
         this.load.atlas('atlas', __dirname + 'src/assets/images/atlas.png', __dirname + 'src/assets/images/atlas.json');
-        this.load.tilemapTiledJSON("map1", __dirname + "src/maps/map1.json");
+        this.load.tilemapTiledJSON("map3", __dirname + "src/maps/map3.json");
         
 
         // Bomb
@@ -56,11 +56,11 @@ module.exports = class Map1Scene extends Phaser.Scene {
         this.startTitleMusic();
 
         
-        this.level = new Level(this, 'map1');
+        this.level = new Level(this, 'map3');
         this.players = this.add.group();
 
         const player1 = this.level.addPlayer(1, 1, 'blue', 'Anh Dima').setGamepadIndex(1);
-        const player2 = this.level.addPlayer(18, 11, 'red', 'Em Tho').setGamepadIndex(0);
+        const player2 = this.level.addPlayer(13, 11, 'red', 'Em Tho').setGamepadIndex(0);
 
         this.players.add(player1);
         this.players.add(player2);
@@ -81,14 +81,9 @@ module.exports = class Map1Scene extends Phaser.Scene {
 
         this.scene.launch('UIScene');
 
-        this.graphics = this.add.graphics({ fillStyle: { color: 0x2266aa } });
-        this.graphics.clear();
-        this.graphics.fillPointShape({x: 20, y: 20}, 10);
-
-
-
-
-
+        // this.graphics = this.add.graphics({ fillStyle: { color: 0x2266aa } });
+        // this.graphics.clear();
+        // this.graphics.fillPointShape({x: 20, y: 20}, 10);
         
     }
 
