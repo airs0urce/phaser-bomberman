@@ -1,8 +1,11 @@
 # phaser-bomberman
 
 Not finished, development in progress in moments when I feel interested to work on it :)
+To run the game, make sure node.js installed (https://nodejs.org/) and run:
 
 ```
+$ git clone https://github.com/airs0urce/phaser-bomberman.git
+$ cd phaser-bomberman
 $ npm install
 $ npm run start
 
