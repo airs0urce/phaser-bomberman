@@ -35,7 +35,7 @@
     "awaiting": "3.0.0",
     "phaser": "3.55.2",
     "phaser3_gui_inspector": "1.2.1",
-    "random": "2.2.0",
+    "random": "3.0.6",
     "random-js": "2.1.0",
     "underscore": "1.13.1"
   }
