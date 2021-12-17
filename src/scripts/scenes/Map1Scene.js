@@ -13,7 +13,6 @@ module.exports = class Map1Scene extends Phaser.Scene {
         super('Map1');
         this.inputs = {};
         this.sounds = {};        
-        this.keyALastState = false;
     }
 
     preload() {
@@ -65,13 +64,9 @@ module.exports = class Map1Scene extends Phaser.Scene {
         this.players.add(player1);
         this.players.add(player2);
 
-
-// this.cameras.main.startFollow(player1, true);
-
-
-// var cameraNew = this.cameras.add(0, 0, 330, 208);
-// cameraNew.setZoom(3.6);
-// cameraNew.roundPixels = true;
+        // var cameraNew = this.cameras.add(100, 100, 330, 208);
+        // cameraNew.setZoom(3.6);
+        // cameraNew.roundPixels = true;
         
 
         // const debugGraphics = this.add.graphics().setAlpha(0.75);

@@ -1,5 +1,5 @@
 
-const random = require('random');
+const random = require('random').default;
 
 module.exports =  {
     rand(min, max) {
