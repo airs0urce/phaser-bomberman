@@ -3,7 +3,11 @@
 Not finished, development in progress in moments when I feel interested to work on it :)
 
 This is pixel perfect (+-, but I tried to do it) copy of Bomberman II game written on Phaser.js.
-To run the game, make sure node.js installed (https://nodejs.org/) and run:
+
+
+To run the game use Node.js 16, starting from node v17 the game doesn't work.
+
+Run:
 
 ```
 $ git clone https://github.com/airs0urce/phaser-bomberman.git
