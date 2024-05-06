@@ -8,7 +8,7 @@ To run the game, make sure node.js installed (https://nodejs.org/) and run:
 ```
 $ git clone https://github.com/airs0urce/phaser-bomberman.git
 $ cd phaser-bomberman
-$ npm install
+$ npm ci
 $ npm start
 
 ```
