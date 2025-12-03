@@ -5,11 +5,12 @@ Not finished, development in progress in moments when I feel interested to work 
 This is pixel perfect (+-, but I tried to do it) copy of Bomberman II game written on Phaser.js.
 
 
-To run the game use Node.js 16, starting from node v17 the game doesn't work.
+To run the game use Node.js 16, starting from Node v17 the game doesn't work.
 
 Run:
 
 ```
+// Warning: use Node.js <= v16. This project doesn't work on Node.js starting from v17
 $ git clone https://github.com/airs0urce/phaser-bomberman.git
 $ cd phaser-bomberman
 $ npm ci
