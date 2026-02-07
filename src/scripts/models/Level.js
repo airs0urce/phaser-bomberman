@@ -9,9 +9,9 @@ let bonusOverlapPx = 6;
 
 module.exports = class Level  {
 
-    constructor(scene, x, y) {
+    constructor(scene, mapKey) {
         this.scene = scene;
-        this.map = this.scene.make.tilemap({key: 'map3'});
+        this.map = this.scene.make.tilemap({key: mapKey || 'map3'});
         this.groundLayer =  this.map.createDynamicLayer(
             'ground', 
             this.map.addTilesetImage('tileset-ground'), 
@@ -62,42 +62,61 @@ module.exports = class Level  {
 
             this.scene.stopTitleMusic();
 
+            const registry = this.scene.game.registry;
+            const centerX = this.scene.cameras.main.centerX;
+            const centerY = this.scene.cameras.main.centerY;
+            const shadow = {
+                offsetX: 2, offsetY: 2,
+                color: '#000', blur: 1, stroke: false, fill: true
+            };
+
             // if after 1 sec all players died
             let message;
             if (players.length == 0) {
                 message = 'Draw';
+                registry.set('draws', (registry.get('draws') || 0) + 1);
             } else {
                 const lastPlayer = players[0];
                 message = `Winner is ${lastPlayer.fullName}!`;
+                if (lastPlayer.type === 'blue') {
+                    registry.set('player1Wins', (registry.get('player1Wins') || 0) + 1);
+                } else {
+                    registry.set('player2Wins', (registry.get('player2Wins') || 0) + 1);
+                }
             }
 
-            
-            this.scene.add.text(
-                this.scene.cameras.main.centerX,
-                this.scene.cameras.main.centerY - 16,
-                message, 
-                {
-                    font: `16px Arial`,
+            // Winner message
+            this.scene.add.text(centerX, centerY - 16, message, {
+                    font: '16px Arial',
                     color: '#fff',
-                    shadow: {
-                        offsetX: 2,
-                        offsetY: 2,
-                        color: '#000',
-                        blur: 1,
-                        stroke: false,
-                        fill: true
-                    },
+                    shadow: shadow,
                 })
-            .setOrigin(undefined, 0)
+            .setOrigin(0.5, 0)
+            .setDepth(10);
+
+            // Score line
+            const p1Name = registry.get('player1Name') || 'Player 1';
+            const p2Name = registry.get('player2Name') || 'Player 2';
+            const p1Wins = registry.get('player1Wins') || 0;
+            const p2Wins = registry.get('player2Wins') || 0;
+            const draws = registry.get('draws') || 0;
+
+            this.scene.add.text(centerX, centerY + 4,
+                `${p1Name}: ${p1Wins}  ${p2Name}: ${p2Wins}  Draw: ${draws}`, {
+                    font: '8px Arial',
+                    color: '#ccc',
+                    shadow: shadow,
+                })
+            .setOrigin(0.5, 0)
             .setDepth(10);
 
             this.scene.sounds.vsGameFinish.play();
 
             await a.delay(3000);
 
-            
+
             this.scene.sounds.vsGameFinish.on('complete', () => {
-                this.scene.restart();
+                this.scene.advanceLevel();
             });
         }
     }

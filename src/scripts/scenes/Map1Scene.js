@@ -3,6 +3,7 @@ const Player = require("../models/Player");
 const Bomb = require("../models/Bomb");
 const _ = require("underscore");
 const config = require('../config');
+const levels = require('../levels');
 
 const intersects = Phaser.Geom.Intersects.RectangleToRectangle;
 const tileSize = 16;
@@ -12,26 +13,30 @@ module.exports = class Map1Scene extends Phaser.Scene {
     constructor() {
         super('Map1');
         this.inputs = {};
-        this.sounds = {};        
+        this.sounds = {};
+        this.levelIndex = 0;
+    }
+
+    init(data) {
+        this.levelIndex = (data && data.levelIndex !== undefined) ? data.levelIndex : 0;
     }
 
     preload() {
-        // Level
+        // Audio
         this.load.audio('titleTrack', [__dirname + 'src/assets/audio/track_8.mp3']);
-        this.load.atlas('atlas', __dirname + 'src/assets/images/atlas.png', __dirname + 'src/assets/images/atlas.json');
-        this.load.tilemapTiledJSON("map3", __dirname + "src/maps/map3.json");
-        
-
-        // Bomb
         this.load.audio('bomb-explode', [__dirname + 'src/assets/audio/bomb-explode.mp3']);
         this.load.audio('bomb-place', [__dirname + 'src/assets/audio/bomb-place.mp3']);
-
-        // PLayer
         this.load.audio('player-die', [__dirname + 'src/assets/audio/player-die.mp3']);
         this.load.audio('player-took-bonus', [__dirname + 'src/assets/audio/player-took-bonus.mp3']);
-
         this.load.audio('vs-game-finish', [__dirname + 'src/assets/audio/vs-game-finish.mp3']);
-       
+
+        // Sprites
+        this.load.atlas('atlas', __dirname + 'src/assets/images/atlas.png', __dirname + 'src/assets/images/atlas.json');
+
+        // Load all level maps
+        for (const level of levels) {
+            this.load.tilemapTiledJSON(level.mapKey, __dirname + 'src/maps/' + level.mapKey + '.json');
+        }
     }
 
     create() {
@@ -54,32 +59,54 @@ module.exports = class Map1Scene extends Phaser.Scene {
 
         this.startTitleMusic();
 
-        
-        this.level = new Level(this, 'map3');
+        const currentLevel = levels[this.levelIndex];
+        this.level = new Level(this, currentLevel.mapKey);
         this.players = this.add.group();
 
-        const player1 = this.level.addPlayer(1, 1, 'blue', 'Anh Dima').setGamepadIndex(1);
-        const player2 = this.level.addPlayer(13, 11, 'red', 'Em Tho').setGamepadIndex(0);
+        const registry = this.game.registry;
+        const p1Name = registry.get('player1Name') || 'Player 1';
+        const p2Name = registry.get('player2Name') || 'Player 2';
+
+        const player1 = this.level.addPlayer(1, 1, 'blue', p1Name).setGamepadIndex(1);
+        const player2 = this.level.addPlayer(13, 11, 'red', p2Name).setGamepadIndex(0);
 
         this.players.add(player1);
         this.players.add(player2);
 
-        // var cameraNew = this.cameras.add(100, 100, 330, 208);
-        // cameraNew.setZoom(3.6);
-        // cameraNew.roundPixels = true;
-        
+        // Show level name briefly
+        const levelLabel = this.add.text(
+            this.cameras.main.centerX,
+            this.cameras.main.centerY - 30,
+            currentLevel.name, {
+                font: '14px Arial',
+                fill: '#fff',
+                shadow: {
+                    offsetX: 2, offsetY: 2,
+                    color: '#000', blur: 1, stroke: false, fill: true
+                }
+            }
+        ).setOrigin(0.5).setDepth(15).setAlpha(1);
 
-        // const debugGraphics = this.add.graphics().setAlpha(0.75);
-        //   this.level.groundLayer.renderDebug(debugGraphics, {tileColor: null,collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tilesfaceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
-        // });
-        // PhaserGUIAction(this);
+        this.tweens.add({
+            targets: levelLabel,
+            alpha: 0,
+            delay: 1500,
+            duration: 500,
+        });
+
+        // Esc key handler
+        this.input.keyboard.addKey('ESC').on('down', () => {
+            this.restart();
+        });
+
+        // Show esc hint
+        const escHint = document.getElementById('esc-hint');
+        if (escHint) escHint.style.display = '';
+        this.events.on('shutdown', () => {
+            if (escHint) escHint.style.display = 'none';
+        });
 
         this.scene.launch('UIScene');
-
-        // this.graphics = this.add.graphics({ fillStyle: { color: 0x2266aa } });
-        // this.graphics.clear();
-        // this.graphics.fillPointShape({x: 20, y: 20}, 10);
-        
     }
 
     update(time, delta) {
@@ -88,29 +115,26 @@ module.exports = class Map1Scene extends Phaser.Scene {
         });
     }
 
+    advanceLevel() {
+        this.sound.stopAll();
+        const nextIndex = this.levelIndex + 1;
+        if (nextIndex < levels.length) {
+            this.scene.start('Map1', { levelIndex: nextIndex });
+        } else {
+            this.scene.start('LevelSelect');
+        }
+    }
+
     restart() {
         this.sound.stopAll()
-        this.scene.restart();
+        this.scene.start('LevelSelect');
     }
 
     stopTitleMusic() {
         this.sounds.titleTrack.stop();
-        
     }
 
     startTitleMusic() {
         this.sounds.titleTrack.play({loop: true});
     }
-
-    
 }
-
-
-
-
-
-
-
-
-
-

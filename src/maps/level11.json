@@ -1,0 +1,495 @@
+{
+ "compressionlevel": -1,
+ "editorsettings": {
+  "export": {
+   "format": "json",
+   "target": "level11.json"
+  }
+ },
+ "height": 13,
+ "infinite": false,
+ "layers": [
+  {
+   "compression": "",
+   "data": "CQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAgAAAAIAAAABwAAAAgAAAAHAAAACAAAAAcAAAAIAAAABwAAAAgAAAAHAAAACAAAAAgAAAAJAAAACQAAAAgAAAAJAAAABwAAAAkAAAAHAAAACQAAAAcAAAAJAAAABwAAAAkAAAAHAAAACQAAAAgAAAAJAAAACQAAAAcAAAAHAAAACAAAAAcAAAAIAAAABwAAAAgAAAAHAAAACAAAAAcAAAAIAAAABwAAAAcAAAAJAAAACQAAAAgAAAAJAAAABwAAAAkAAAAHAAAACQAAAAcAAAAJAAAABwAAAAkAAAAHAAAACQAAAAgAAAAJAAAACQAAAAcAAAAHAAAACAAAAAcAAAAIAAAACAAAAAgAAAAIAAAACAAAAAcAAAAIAAAABwAAAAcAAAAJAAAACQAAAAgAAAAJAAAABwAAAAkAAAAIAAAACQAAAAgAAAAJAAAACAAAAAkAAAAHAAAACQAAAAgAAAAJAAAACQAAAAcAAAAHAAAACAAAAAcAAAAIAAAACAAAAAgAAAAIAAAACAAAAAcAAAAIAAAABwAAAAcAAAAJAAAACQAAAAgAAAAJAAAABwAAAAkAAAAHAAAACQAAAAcAAAAJAAAABwAAAAkAAAAHAAAACQAAAAgAAAAJAAAACQAAAAcAAAAHAAAACAAAAAcAAAAIAAAABwAAAAgAAAAHAAAACAAAAAcAAAAIAAAABwAAAAcAAAAJAAAACQAAAAgAAAAJAAAABwAAAAkAAAAHAAAACQAAAAcAAAAJAAAABwAAAAkAAAAHAAAACQAAAAgAAAAJAAAACQAAAAgAAAAIAAAABwAAAAgAAAAHAAAACAAAAAcAAAAIAAAABwAAAAgAAAAHAAAACAAAAAgAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAACQAAAAkAAAAJAAAA",
+   "encoding": "base64",
+   "height": 13,
+   "id": 3,
+   "name": "ground",
+   "opacity": 1,
+   "type": "tilelayer",
+   "visible": true,
+   "width": 15,
+   "x": 0,
+   "y": 0
+  },
+  {
+   "draworder": "topdown",
+   "id": 2,
+   "name": "objects",
+   "objects": [
+    {
+     "height": 16,
+     "id": 7,
+     "name": "player1",
+     "properties": [
+      {
+       "name": "character",
+       "type": "string",
+       "value": "blue"
+      }
+     ],
+     "rotation": 0,
+     "type": "player",
+     "visible": true,
+     "width": 16,
+     "x": 16.2131,
+     "y": 15.0601
+    },
+    {
+     "height": 16,
+     "id": 10,
+     "name": "player2",
+     "properties": [
+      {
+       "name": "character",
+       "type": "string",
+       "value": "red"
+      }
+     ],
+     "rotation": 0,
+     "type": "player",
+     "visible": true,
+     "width": 16,
+     "x": 208.07,
+     "y": 176.005
+    }
+   ],
+   "opacity": 1,
+   "type": "objectgroup",
+   "visible": true,
+   "x": 0,
+   "y": 0
+  }
+ ],
+ "nextlayerid": 4,
+ "nextobjectid": 11,
+ "orientation": "orthogonal",
+ "renderorder": "right-down",
+ "tiledversion": "1.3.4",
+ "tileheight": 16,
+ "tilesets": [
+  {
+   "columns": 4,
+   "firstgid": 1,
+   "image": "../assets/images/ground.png",
+   "imageheight": 64,
+   "imagewidth": 64,
+   "margin": 0,
+   "name": "tileset-ground",
+   "spacing": 0,
+   "tilecount": 16,
+   "tileheight": 16,
+   "tiles": [
+    {
+     "id": 0,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "bricks"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 1
+      }
+     ],
+     "type": "brick"
+    },
+    {
+     "id": 1,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "ground"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 1
+      }
+     ],
+     "type": "ground"
+    },
+    {
+     "id": 2,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "wall"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 1
+      }
+     ],
+     "type": "wall"
+    },
+    {
+     "id": 3,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "bricks"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 2
+      }
+     ],
+     "type": "brick"
+    },
+    {
+     "id": 4,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "ground"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 2
+      }
+     ],
+     "type": "ground"
+    },
+    {
+     "id": 5,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "wall"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 2
+      }
+     ],
+     "type": "wall"
+    },
+    {
+     "id": 6,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "bricks"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 3
+      }
+     ],
+     "type": "brick"
+    },
+    {
+     "id": 7,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "ground"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 3
+      }
+     ],
+     "type": "ground"
+    },
+    {
+     "id": 8,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "wall"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 3
+      }
+     ],
+     "type": "wall"
+    },
+    {
+     "id": 9,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "bricks"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 4
+      }
+     ],
+     "type": "brick"
+    },
+    {
+     "id": 10,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "ground"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 4
+      }
+     ],
+     "type": "ground"
+    },
+    {
+     "id": 11,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "wall"
+      },
+      {
+       "name": "tile_set_id",
+       "type": "int",
+       "value": 4
+      }
+     ],
+     "type": "wall"
+    },
+    {
+     "id": 12,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "finish"
+      }
+     ],
+     "type": "gate"
+    },
+    {
+     "id": 13,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "bonus-bomb-powerup"
+      }
+     ]
+    },
+    {
+     "id": 14,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "bonus-bomb-count"
+      }
+     ]
+    },
+    {
+     "id": 15,
+     "properties": [
+      {
+       "name": "collides",
+       "type": "bool",
+       "value": false
+      },
+      {
+       "name": "destructible",
+       "type": "bool",
+       "value": true
+      },
+      {
+       "name": "name",
+       "type": "string",
+       "value": "bonus-dollar"
+      }
+     ]
+    }
+   ],
+   "tilewidth": 16
+  }
+ ],
+ "tilewidth": 16,
+ "type": "map",
+ "version": 1.2,
+ "width": 15
+}

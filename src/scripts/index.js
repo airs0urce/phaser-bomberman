@@ -1,5 +1,6 @@
 const Phaser = require("phaser");
 const WelcomeScene = require("./scenes/WelcomeScene");
+const LevelSelectScene = require("./scenes/LevelSelectScene");
 const Map1Scene = require("./scenes/Map1Scene");
 const modifyPhaser = require("./modifyPhaser");
 
@@ -12,6 +13,7 @@ var config = {
     pixelArt: true,
     roundPixels: true,
     zoom: 2.6,
+    parent: 'game-container',
     backgroundColor: "#000",
     input: {
         gamepad: true
@@ -23,7 +25,7 @@ var config = {
             // debug: true
         }
     },
-    scene: [WelcomeScene, Map1Scene],
+    scene: [WelcomeScene, LevelSelectScene, Map1Scene],
 };
 
 const game = new Phaser.Game(config);
