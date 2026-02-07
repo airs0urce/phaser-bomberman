@@ -1,3 +1,8 @@
+const crypto = require("crypto");
+const origCreateHash = crypto.createHash;
+crypto.createHash = (alg, opts) =>
+    origCreateHash(alg === "md4" ? "sha256" : alg, opts);
+
 const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");

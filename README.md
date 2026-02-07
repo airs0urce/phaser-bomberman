@@ -4,20 +4,11 @@ This is pixel perfect (+-, but I tried to do it) copy of Bomberman II game writt
 
 How to run:
 
-Node.js < v17:
 ```
 $ git clone https://github.com/airs0urce/phaser-bomberman.git
 $ cd phaser-bomberman
 $ npm ci
 $ npm start
-```
-
-Node.js >= v17:
-```
-$ git clone https://github.com/airs0urce/phaser-bomberman.git
-$ cd phaser-bomberman
-$ npm ci
-$ NODE_OPTIONS=--openssl-legacy-provider npm start
 ```
 
 Move character - arrow keys  
