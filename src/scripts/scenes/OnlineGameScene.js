@@ -78,8 +78,8 @@ module.exports = class OnlineGameScene extends Phaser.Scene {
         const remoteType = isPlayer1 ? 'red' : 'blue';
 
         // Add players at spawn positions
-        this.localPlayer = this.level.addPlayer(1, 1, 'blue', 'Player 1');
-        this.remotePlayer = this.level.addPlayer(13, 11, 'red', 'Player 2');
+        this.localPlayer = this.level.addPlayer(1, 1, 'blue', 'Blue');
+        this.remotePlayer = this.level.addPlayer(13, 11, 'red', 'Red');
 
         this.players.add(this.localPlayer);
         this.players.add(this.remotePlayer);

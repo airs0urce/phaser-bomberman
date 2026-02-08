@@ -83,15 +83,13 @@ module.exports = class Level  {
 
             const overlay = new HtmlOverlay(this.scene);
 
-            const p1Name = registry.get('player1Name') || 'Player 1';
-            const p2Name = registry.get('player2Name') || 'Player 2';
             const p1Wins = registry.get('player1Wins') || 0;
             const p2Wins = registry.get('player2Wins') || 0;
             const draws = registry.get('draws') || 0;
 
             overlay.showPanel(centerX, centerY, [
                 { text: message, fontSize: 40, color: '#fff' },
-                { text: `${p1Name}: ${p1Wins}  ${p2Name}: ${p2Wins}  Draw: ${draws}`, fontSize: 20, color: '#ccc' },
+                { text: `Blue: ${p1Wins}  Red: ${p2Wins}  Draw: ${draws}`, fontSize: 20, color: '#ccc' },
             ]);
 
             this.scene.sounds.vsGameFinish.play();

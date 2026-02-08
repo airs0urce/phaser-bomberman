@@ -63,13 +63,8 @@ module.exports = class Map1Scene extends Phaser.Scene {
         const currentLevel = levels[this.levelIndex];
         this.level = new Level(this, currentLevel.mapKey);
         this.players = this.add.group();
-
-        const registry = this.game.registry;
-        const p1Name = registry.get('player1Name') || 'Player 1';
-        const p2Name = registry.get('player2Name') || 'Player 2';
-
-        const player1 = this.level.addPlayer(1, 1, 'blue', p1Name).setGamepadIndex(1);
-        const player2 = this.level.addPlayer(13, 11, 'red', p2Name).setGamepadIndex(0);
+        const player1 = this.level.addPlayer(1, 1, 'blue', 'Blue').setGamepadIndex(1);
+        const player2 = this.level.addPlayer(13, 11, 'red', 'Red').setGamepadIndex(0);
 
         this.players.add(player1);
         this.players.add(player2);

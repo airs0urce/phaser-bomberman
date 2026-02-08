@@ -17,8 +17,6 @@ module.exports = class LevelSelectScene extends Phaser.Scene {
         const registry = this.game.registry;
 
         // Initialize registry defaults if not set
-        if (!registry.has('player1Name')) registry.set('player1Name', 'Player 1');
-        if (!registry.has('player2Name')) registry.set('player2Name', 'Player 2');
         if (!registry.has('player1Wins')) registry.set('player1Wins', 0);
         if (!registry.has('player2Wins')) registry.set('player2Wins', 0);
         if (!registry.has('draws')) registry.set('draws', 0);
@@ -68,8 +66,6 @@ module.exports = class LevelSelectScene extends Phaser.Scene {
             webkitUserSelect: 'none'
         });
 
-        const registry = this.game.registry;
-
         // --- Title ---
         const title = this._makeEl(overlay, {
             top: 6, fontSize: 16, color: '#fff', centered: true,
@@ -77,42 +73,9 @@ module.exports = class LevelSelectScene extends Phaser.Scene {
         });
         title.textContent = 'BOMBERMAN';
 
-        // --- Player names ---
-        this.p1El = this._makeEl(overlay, {
-            top: 30, fontSize: 9, color: '#6cf', centered: true, interactive: true
-        });
-        this.p1El.textContent = `P1: ${registry.get('player1Name')}`;
-
-        this.p2El = this._makeEl(overlay, {
-            top: 42, fontSize: 9, color: '#f66', centered: true, interactive: true
-        });
-        this.p2El.textContent = `P2: ${registry.get('player2Name')}`;
-
-        this.p1El.addEventListener('click', () => {
-            const name = prompt('Enter Player 1 name:', registry.get('player1Name'));
-            if (name && name.trim()) {
-                registry.set('player1Name', name.trim());
-                this.p1El.textContent = `P1: ${name.trim()}`;
-            }
-        });
-
-        this.p2El.addEventListener('click', () => {
-            const name = prompt('Enter Player 2 name:', registry.get('player2Name'));
-            if (name && name.trim()) {
-                registry.set('player2Name', name.trim());
-                this.p2El.textContent = `P2: ${name.trim()}`;
-            }
-        });
-
-        // --- Edit hint ---
-        const hint = this._makeEl(overlay, {
-            top: 54, fontSize: 6, color: '#555', centered: true
-        });
-        hint.textContent = '(click name to edit)';
-
         // --- Scores ---
         this.scoreEl = this._makeEl(overlay, {
-            top: 66, fontSize: 8, color: '#aaa', centered: true, shadow: true
+            top: 30, fontSize: 8, color: '#aaa', centered: true, shadow: true
         });
         this.scoreEl.textContent = this._scoreString();
 
@@ -121,7 +84,7 @@ module.exports = class LevelSelectScene extends Phaser.Scene {
         const centerX = gameW / 2;
         this._colLeft = centerX - 42;
         this._colRight = centerX + 42;
-        this._startY = 86;
+        this._startY = 46;
         this._rowHeight = 14;
 
         for (let i = 0; i < levels.length; i++) {
@@ -155,7 +118,7 @@ module.exports = class LevelSelectScene extends Phaser.Scene {
 
         // --- Online buttons ---
         const onlineEl = this._makeEl(overlay, {
-            top: 176, fontSize: 10, color: '#0f0', centered: true, interactive: true
+            top: 136, fontSize: 10, color: '#0f0', centered: true, interactive: true
         });
         onlineEl.textContent = '[ CREATE ONLINE GAME ]';
         onlineEl.addEventListener('click', () => {
@@ -163,7 +126,7 @@ module.exports = class LevelSelectScene extends Phaser.Scene {
         });
 
         const joinEl = this._makeEl(overlay, {
-            top: 192, fontSize: 10, color: '#0f0', centered: true, interactive: true
+            top: 152, fontSize: 10, color: '#0f0', centered: true, interactive: true
         });
         joinEl.textContent = '[ JOIN BY CODE ]';
         joinEl.addEventListener('click', () => {
@@ -221,7 +184,7 @@ module.exports = class LevelSelectScene extends Phaser.Scene {
         const p1Wins = registry.get('player1Wins') || 0;
         const p2Wins = registry.get('player2Wins') || 0;
         const draws = registry.get('draws') || 0;
-        return `Wins: ${p1Wins} - ${p2Wins}  Draws: ${draws}`;
+        return `Blue: ${p1Wins}  Red: ${p2Wins}  Draws: ${draws}`;
     }
 
     _updateSelection() {
