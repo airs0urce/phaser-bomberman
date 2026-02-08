@@ -56,7 +56,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             pressed.down = inputs.cursors.down.isDown;
             pressed.left = inputs.cursors.left.isDown;
             pressed.right = inputs.cursors.right.isDown;
-            pressed.placeBomb = inputs.keyA.isDown;
+            pressed.placeBomb = inputs.keyBombSpace.isDown || inputs.keyBombA.isDown;
         }
         
         
@@ -99,6 +99,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 }
             }
         }
+
+        // Touch controls (mobile)
+        const tc = this.scene.game.registry.get('touchControls');
+        if (tc && tc.enabled && this.type === 'blue') {
+            if (tc.state.up) pressed.up = true;
+            if (tc.state.down) pressed.down = true;
+            if (tc.state.left) pressed.left = true;
+            if (tc.state.right) pressed.right = true;
+            if (tc.state.bomb) pressed.placeBomb = true;
+        }
+
         this.pressed = pressed;
 
         this._updateTile();

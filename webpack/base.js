@@ -1,14 +1,6 @@
-const crypto = require("crypto");
-const origCreateHash = crypto.createHash;
-crypto.createHash = (alg, opts) =>
-    origCreateHash(alg === "md4" ? "sha256" : alg, opts);
-
 const webpack = require("webpack");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const {
-    CleanWebpackPlugin
-} = require("clean-webpack-plugin");
 
 
 module.exports = {
@@ -16,7 +8,15 @@ module.exports = {
     mode: "development",
     devtool: "eval-source-map",
     devServer: {
-        liveReload: false
+        liveReload: false,
+        static: {
+            directory: path.resolve(__dirname, '../'),
+        },
+        historyApiFallback: {
+            rewrites: [
+                { from: /^\/online\//, to: '/index.html' }
+            ]
+        }
     },
     resolve: {
         extensions: ['.js']
@@ -28,24 +28,23 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
-                        plugins: ['@babel/plugin-proposal-class-properties']
+                        plugins: ['@babel/plugin-transform-class-properties']
                     }
                 }
             },
             {
-                test: [/\.vert$/, /\.frag$/],
-                use: "raw-loader"
+                test: /\.m?js$/,
+                resolve: {
+                    fullySpecified: false
+                }
             },
             {
                 test: /\.(gif|png|jpe?g|svg|xml|json|tsx|mp3)$/i,
-                use: "file-loader"
+                type: 'asset/resource'
             }
         ]
     },
     plugins: [
-        new CleanWebpackPlugin({
-            root: path.resolve(__dirname, "../")
-        }),
         new webpack.DefinePlugin({
             CANVAS_RENDERER: JSON.stringify(true),
             WEBGL_RENDERER: JSON.stringify(true)
@@ -56,8 +55,3 @@ module.exports = {
     ],
     target: 'web'
 };
-
-
-
-
-

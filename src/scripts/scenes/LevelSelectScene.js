@@ -6,8 +6,14 @@ module.exports = class LevelSelectScene extends Phaser.Scene {
     }
 
     create() {
+        // Auto-join online game if URL matches /online/<gameId>
+        const pathMatch = window.location.pathname.match(/^\/online\/([A-Za-z0-9]+)$/);
+        if (pathMatch) {
+            this.scene.start('OnlineLobby', { gameId: pathMatch[1] });
+            return;
+        }
+
         this.cameras.main.setBackgroundColor('#000');
-        const centerX = this.cameras.main.centerX;
         const registry = this.game.registry;
 
         // Initialize registry defaults if not set
@@ -17,102 +23,223 @@ module.exports = class LevelSelectScene extends Phaser.Scene {
         if (!registry.has('player2Wins')) registry.set('player2Wins', 0);
         if (!registry.has('draws')) registry.set('draws', 0);
 
-        const shadow = {
-            offsetX: 1, offsetY: 1,
-            color: '#000', blur: 0, stroke: false, fill: true
-        };
+        this.selectedIndex = 0;
+        this.inputReady = true;
 
-        // Title
-        this.add.text(centerX, 6, 'BOMBERMAN', {
-            font: '16px Arial', fill: '#fff', shadow: shadow
-        }).setOrigin(0.5, 0);
+        this._createOverlay();
+        this._setupKeyboard();
 
-        // Player names (clickable)
-        const p1Name = registry.get('player1Name');
-        const p2Name = registry.get('player2Name');
+        this._onResize = () => this._createOverlay();
+        window.addEventListener('resize', this._onResize);
 
-        const p1Text = this.add.text(centerX, 30, `P1: ${p1Name}`, {
-            font: '9px Arial', fill: '#6cf'
-        }).setOrigin(0.5, 0).setInteractive({ useHandCursor: true });
+        this.events.on('shutdown', () => {
+            this._destroyOverlay();
+            this._destroyJoinOverlay();
+            window.removeEventListener('resize', this._onResize);
+        });
+    }
 
-        const p2Text = this.add.text(centerX, 42, `P2: ${p2Name}`, {
-            font: '9px Arial', fill: '#f66'
-        }).setOrigin(0.5, 0).setInteractive({ useHandCursor: true });
+    _createOverlay() {
+        this._destroyOverlay();
 
-        p1Text.on('pointerdown', () => {
+        const canvas = this.game.canvas;
+        const container = canvas.parentElement;
+        container.style.position = 'relative';
+
+        const gameW = this.game.config.width;
+        const displayW = canvas.clientWidth || canvas.offsetWidth || gameW * this.game.config.zoom;
+        const displayH = canvas.clientHeight || canvas.offsetHeight || this.game.config.height * this.game.config.zoom;
+        const scale = displayW / gameW;
+        this._scale = scale;
+
+        const overlay = document.createElement('div');
+        this.overlay = overlay;
+        overlay.id = 'menu-overlay';
+        Object.assign(overlay.style, {
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            width: displayW + 'px',
+            height: displayH + 'px',
+            pointerEvents: 'none',
+            fontFamily: 'Arial, sans-serif',
+            overflow: 'hidden',
+            userSelect: 'none',
+            webkitUserSelect: 'none'
+        });
+
+        const registry = this.game.registry;
+
+        // --- Title ---
+        const title = this._makeEl(overlay, {
+            top: 6, fontSize: 16, color: '#fff', centered: true,
+            shadow: true, bold: true, letterSpacing: 2
+        });
+        title.textContent = 'BOMBERMAN';
+
+        // --- Player names ---
+        this.p1El = this._makeEl(overlay, {
+            top: 30, fontSize: 9, color: '#6cf', centered: true, interactive: true
+        });
+        this.p1El.textContent = `P1: ${registry.get('player1Name')}`;
+
+        this.p2El = this._makeEl(overlay, {
+            top: 42, fontSize: 9, color: '#f66', centered: true, interactive: true
+        });
+        this.p2El.textContent = `P2: ${registry.get('player2Name')}`;
+
+        this.p1El.addEventListener('click', () => {
             const name = prompt('Enter Player 1 name:', registry.get('player1Name'));
             if (name && name.trim()) {
                 registry.set('player1Name', name.trim());
-                p1Text.setText(`P1: ${name.trim()}`);
+                this.p1El.textContent = `P1: ${name.trim()}`;
             }
         });
 
-        p2Text.on('pointerdown', () => {
+        this.p2El.addEventListener('click', () => {
             const name = prompt('Enter Player 2 name:', registry.get('player2Name'));
             if (name && name.trim()) {
                 registry.set('player2Name', name.trim());
-                p2Text.setText(`P2: ${name.trim()}`);
+                this.p2El.textContent = `P2: ${name.trim()}`;
             }
         });
 
-        // Click name hint
-        this.add.text(centerX, 54, '(click name to edit)', {
-            font: '6px Arial', fill: '#555'
-        }).setOrigin(0.5, 0);
+        // --- Edit hint ---
+        const hint = this._makeEl(overlay, {
+            top: 54, fontSize: 6, color: '#555', centered: true
+        });
+        hint.textContent = '(click name to edit)';
 
-        // Scores
-        const p1Wins = registry.get('player1Wins');
-        const p2Wins = registry.get('player2Wins');
-        const draws = registry.get('draws');
+        // --- Scores ---
+        this.scoreEl = this._makeEl(overlay, {
+            top: 66, fontSize: 8, color: '#aaa', centered: true, shadow: true
+        });
+        this.scoreEl.textContent = this._scoreString();
 
-        this.scoreText = this.add.text(centerX, 66, this._scoreString(), {
-            font: '8px Arial', fill: '#aaa', shadow: shadow
-        }).setOrigin(0.5, 0);
-
-        // Level grid (two columns)
-        this.selectedIndex = 0;
-        this.levelTexts = [];
-
-        const colLeft = centerX - 42;
-        const colRight = centerX + 42;
-        const startY = 86;
-        const rowHeight = 14;
+        // --- Level grid ---
+        this.levelEls = [];
+        const centerX = gameW / 2;
+        this._colLeft = centerX - 42;
+        this._colRight = centerX + 42;
+        this._startY = 86;
+        this._rowHeight = 14;
 
         for (let i = 0; i < levels.length; i++) {
-            const col = i < 6 ? colLeft : colRight;
+            const col = i < 6 ? this._colLeft : this._colRight;
             const row = i < 6 ? i : i - 6;
-            const x = col;
-            const y = startY + row * rowHeight;
+            const y = this._startY + row * this._rowHeight;
 
-            const text = this.add.text(x, y, levels[i].name, {
-                font: '9px Arial', fill: '#888'
-            }).setOrigin(0.5, 0).setInteractive({ useHandCursor: true });
+            const el = this._makeEl(overlay, {
+                left: col, top: y, fontSize: 9, color: '#888', interactive: true
+            });
+            el.textContent = levels[i].name;
 
-            text.on('pointerover', () => {
+            el.addEventListener('mouseenter', () => {
                 this.selectedIndex = i;
                 this._updateSelection();
             });
-            text.on('pointerdown', () => {
+
+            el.addEventListener('click', () => {
                 this.selectedIndex = i;
                 this._startFromLevel(i);
             });
 
-            this.levelTexts.push(text);
+            this.levelEls.push(el);
         }
 
-        // Selection arrow
-        this.arrow = this.add.text(0, 0, '>', {
-            font: '9px Arial', fill: '#fff'
-        }).setOrigin(0.5, 0);
+        // --- Selection arrow ---
+        this.arrowEl = this._makeEl(overlay, {
+            left: 0, top: 0, fontSize: 9, color: '#fff'
+        });
+        this.arrowEl.textContent = '>';
 
+        // --- Online buttons ---
+        const onlineEl = this._makeEl(overlay, {
+            top: 176, fontSize: 10, color: '#0f0', centered: true, interactive: true
+        });
+        onlineEl.textContent = '[ CREATE ONLINE GAME ]';
+        onlineEl.addEventListener('click', () => {
+            this.scene.start('OnlineMapSelect');
+        });
+
+        const joinEl = this._makeEl(overlay, {
+            top: 192, fontSize: 10, color: '#0f0', centered: true, interactive: true
+        });
+        joinEl.textContent = '[ JOIN BY CODE ]';
+        joinEl.addEventListener('click', () => {
+            this._showJoinCodeInput();
+        });
+
+        container.appendChild(overlay);
         this._updateSelection();
+    }
 
-        // Controls
+    _makeEl(parent, opts) {
+        const el = document.createElement('div');
+        const s = this._scale;
+        const fontSize = Math.round(opts.fontSize * s);
+
+        el.style.position = 'absolute';
+        el.style.fontSize = fontSize + 'px';
+        el.style.lineHeight = '1.2';
+        el.style.color = opts.color;
+        el.style.whiteSpace = 'nowrap';
+        el.style.top = Math.round(opts.top * s) + 'px';
+
+        if (opts.centered) {
+            el.style.left = '50%';
+            el.style.transform = 'translateX(-50%)';
+        } else {
+            el.style.left = Math.round(opts.left * s) + 'px';
+            el.style.transform = 'translateX(-50%)';
+        }
+
+        if (opts.shadow) {
+            const sh = Math.max(1, Math.round(s));
+            el.style.textShadow = `${sh}px ${sh}px 0 #000`;
+        }
+        if (opts.bold) el.style.fontWeight = 'bold';
+        if (opts.letterSpacing) el.style.letterSpacing = opts.letterSpacing + 'px';
+        if (opts.interactive) {
+            el.style.pointerEvents = 'auto';
+            el.style.cursor = 'pointer';
+        }
+
+        parent.appendChild(el);
+        return el;
+    }
+
+    _destroyOverlay() {
+        if (this.overlay && this.overlay.parentElement) {
+            this.overlay.parentElement.removeChild(this.overlay);
+        }
+        this.overlay = null;
+    }
+
+    _scoreString() {
+        const registry = this.game.registry;
+        const p1Wins = registry.get('player1Wins') || 0;
+        const p2Wins = registry.get('player2Wins') || 0;
+        const draws = registry.get('draws') || 0;
+        return `Wins: ${p1Wins} - ${p2Wins}  Draws: ${draws}`;
+    }
+
+    _updateSelection() {
+        for (let i = 0; i < this.levelEls.length; i++) {
+            this.levelEls[i].style.color = i === this.selectedIndex ? '#fff' : '#888';
+        }
+
+        const i = this.selectedIndex;
+        const col = i < 6 ? this._colLeft : this._colRight;
+        const row = i < 6 ? i : i - 6;
+        this.arrowEl.style.left = Math.round((col - 30) * this._scale) + 'px';
+        this.arrowEl.style.top = Math.round((this._startY + row * this._rowHeight) * this._scale) + 'px';
+    }
+
+    _setupKeyboard() {
         const cursors = this.input.keyboard.createCursorKeys();
         const enterKey = this.input.keyboard.addKey('ENTER');
         const spaceKey = this.input.keyboard.addKey('SPACE');
-
-        this.inputReady = true;
 
         cursors.up.on('down', () => {
             if (!this.inputReady) return;
@@ -153,30 +280,104 @@ module.exports = class LevelSelectScene extends Phaser.Scene {
         });
     }
 
-    _scoreString() {
-        const registry = this.game.registry;
-        const p1Wins = registry.get('player1Wins') || 0;
-        const p2Wins = registry.get('player2Wins') || 0;
-        const draws = registry.get('draws') || 0;
-        return `Wins: ${p1Wins} - ${p2Wins}  Draws: ${draws}`;
+    _showJoinCodeInput() {
+        if (this._joinOverlay) return;
+
+        const canvas = this.game.canvas;
+        const container = canvas.parentElement;
+        const displayW = canvas.clientWidth || canvas.offsetWidth;
+        const displayH = canvas.clientHeight || canvas.offsetHeight;
+
+        const joinOverlay = document.createElement('div');
+        this._joinOverlay = joinOverlay;
+        Object.assign(joinOverlay.style, {
+            position: 'absolute',
+            top: (canvas.offsetTop || 0) + 'px',
+            left: (canvas.offsetLeft || 0) + 'px',
+            width: displayW + 'px',
+            height: displayH + 'px',
+            background: 'rgba(0,0,0,0.92)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontFamily: 'Arial, sans-serif',
+            zIndex: '20',
+        });
+
+        const label = document.createElement('div');
+        label.textContent = 'Enter game code:';
+        Object.assign(label.style, { color: '#fff', fontSize: '20px', marginBottom: '16px' });
+        joinOverlay.appendChild(label);
+
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.maxLength = 6;
+        input.placeholder = 'ABC123';
+        input.autocapitalize = 'characters';
+        Object.assign(input.style, {
+            background: '#111',
+            border: '2px solid #0f0',
+            color: '#0f0',
+            fontSize: '28px',
+            fontFamily: 'monospace',
+            padding: '8px 16px',
+            textAlign: 'center',
+            width: '160px',
+            borderRadius: '6px',
+            outline: 'none',
+            letterSpacing: '4px',
+            textTransform: 'uppercase',
+        });
+        joinOverlay.appendChild(input);
+
+        const btnRow = document.createElement('div');
+        Object.assign(btnRow.style, { display: 'flex', gap: '12px', marginTop: '16px' });
+
+        const joinBtn = document.createElement('button');
+        joinBtn.textContent = 'JOIN';
+        Object.assign(joinBtn.style, {
+            background: '#0a0', border: 'none', color: '#fff',
+            fontSize: '16px', fontWeight: 'bold', padding: '8px 28px',
+            borderRadius: '4px', cursor: 'pointer',
+        });
+
+        const cancelBtn = document.createElement('button');
+        cancelBtn.textContent = 'CANCEL';
+        Object.assign(cancelBtn.style, {
+            background: '#333', border: 'none', color: '#aaa',
+            fontSize: '16px', fontWeight: 'bold', padding: '8px 20px',
+            borderRadius: '4px', cursor: 'pointer',
+        });
+
+        btnRow.appendChild(joinBtn);
+        btnRow.appendChild(cancelBtn);
+        joinOverlay.appendChild(btnRow);
+
+        const doJoin = () => {
+            const code = input.value.trim().toUpperCase();
+            if (code.length > 0) {
+                this._destroyJoinOverlay();
+                this.scene.start('OnlineLobby', { gameId: code });
+            }
+        };
+
+        joinBtn.addEventListener('click', doJoin);
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') doJoin();
+            if (e.key === 'Escape') this._destroyJoinOverlay();
+        });
+        cancelBtn.addEventListener('click', () => this._destroyJoinOverlay());
+
+        container.appendChild(joinOverlay);
+        input.focus();
     }
 
-    _updateSelection() {
-        const colLeft = this.cameras.main.centerX - 42;
-        const colRight = this.cameras.main.centerX + 42;
-        const startY = 86;
-        const rowHeight = 14;
-
-        for (let i = 0; i < this.levelTexts.length; i++) {
-            this.levelTexts[i].setStyle({
-                fill: i === this.selectedIndex ? '#fff' : '#888'
-            });
+    _destroyJoinOverlay() {
+        if (this._joinOverlay && this._joinOverlay.parentElement) {
+            this._joinOverlay.parentElement.removeChild(this._joinOverlay);
         }
-
-        const i = this.selectedIndex;
-        const col = i < 6 ? colLeft : colRight;
-        const row = i < 6 ? i : i - 6;
-        this.arrow.setPosition(col - 30, startY + row * rowHeight);
+        this._joinOverlay = null;
     }
 
     _startFromLevel(index) {

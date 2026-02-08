@@ -1,9 +1,9 @@
 const Level = require("../models/Level");
 const Player = require("../models/Player");
 const Bomb = require("../models/Bomb");
-const _ = require("underscore");
 const config = require('../config');
 const levels = require('../levels');
+const HtmlOverlay = require('../HtmlOverlay');
 
 const intersects = Phaser.Geom.Intersects.RectangleToRectangle;
 const tileSize = 16;
@@ -44,7 +44,8 @@ module.exports = class Map1Scene extends Phaser.Scene {
 
         this.inputs = {
             cursors: this.input.keyboard.createCursorKeys(),
-            keyA: this.input.keyboard.addKey('A'),
+            keyBombSpace: this.input.keyboard.addKey('SPACE'),
+            keyBombA: this.input.keyboard.addKey('A'),
             gamepad: this.input.gamepad
         }
 
@@ -74,30 +75,28 @@ module.exports = class Map1Scene extends Phaser.Scene {
         this.players.add(player2);
 
         // Show level name briefly
-        const levelLabel = this.add.text(
+        const overlay = new HtmlOverlay(this);
+        overlay.showText(
             this.cameras.main.centerX,
             this.cameras.main.centerY - 30,
             currentLevel.name, {
-                font: '14px Arial',
-                fill: '#fff',
-                shadow: {
-                    offsetX: 2, offsetY: 2,
-                    color: '#000', blur: 1, stroke: false, fill: true
-                }
+                fontSize: 36, color: '#fff',
+                fadeOutDelay: 1500, fadeOutDuration: 500,
             }
-        ).setOrigin(0.5).setDepth(15).setAlpha(1);
-
-        this.tweens.add({
-            targets: levelLabel,
-            alpha: 0,
-            delay: 1500,
-            duration: 500,
-        });
+        );
 
         // Esc key handler
         this.input.keyboard.addKey('ESC').on('down', () => {
             this.restart();
         });
+
+        // Touch controls (mobile)
+        const tc = this.game.registry.get('touchControls');
+        if (tc && tc.enabled) {
+            tc.show();
+            tc.onMenuPress = () => { this.restart(); };
+            this.events.on('shutdown', () => { tc.hide(); });
+        }
 
         // Show esc hint
         const escHint = document.getElementById('esc-hint');

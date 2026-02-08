@@ -1,8 +1,8 @@
 const Player = require('./Player');
 const config = require('../config');
 const utils = require('../utils');
-const _ = require('lodash');
 const a = require('awaiting');
+const HtmlOverlay = require('../HtmlOverlay');
 
 let animsLoaded = false;
 let bonusOverlapPx = 6;
@@ -12,7 +12,7 @@ module.exports = class Level  {
     constructor(scene, mapKey) {
         this.scene = scene;
         this.map = this.scene.make.tilemap({key: mapKey || 'map3'});
-        this.groundLayer =  this.map.createDynamicLayer(
+        this.groundLayer =  this.map.createLayer(
             'ground', 
             this.map.addTilesetImage('tileset-ground'), 
             0, 0
@@ -60,15 +60,11 @@ module.exports = class Level  {
             // wait 1 sec to give bombs explode
             await a.delay(1000);
 
-            this.scene.stopTitleMusic();
+            if (this.scene.stopTitleMusic) this.scene.stopTitleMusic();
 
             const registry = this.scene.game.registry;
             const centerX = this.scene.cameras.main.centerX;
             const centerY = this.scene.cameras.main.centerY;
-            const shadow = {
-                offsetX: 2, offsetY: 2,
-                color: '#000', blur: 1, stroke: false, fill: true
-            };
 
             // if after 1 sec all players died
             let message;
@@ -85,30 +81,18 @@ module.exports = class Level  {
                 }
             }
 
-            // Winner message
-            this.scene.add.text(centerX, centerY - 16, message, {
-                    font: '16px Arial',
-                    color: '#fff',
-                    shadow: shadow,
-                })
-            .setOrigin(0.5, 0)
-            .setDepth(10);
+            const overlay = new HtmlOverlay(this.scene);
 
-            // Score line
             const p1Name = registry.get('player1Name') || 'Player 1';
             const p2Name = registry.get('player2Name') || 'Player 2';
             const p1Wins = registry.get('player1Wins') || 0;
             const p2Wins = registry.get('player2Wins') || 0;
             const draws = registry.get('draws') || 0;
 
-            this.scene.add.text(centerX, centerY + 4,
-                `${p1Name}: ${p1Wins}  ${p2Name}: ${p2Wins}  Draw: ${draws}`, {
-                    font: '8px Arial',
-                    color: '#ccc',
-                    shadow: shadow,
-                })
-            .setOrigin(0.5, 0)
-            .setDepth(10);
+            overlay.showPanel(centerX, centerY, [
+                { text: message, fontSize: 40, color: '#fff' },
+                { text: `${p1Name}: ${p1Wins}  ${p2Name}: ${p2Wins}  Draw: ${draws}`, fontSize: 20, color: '#ccc' },
+            ]);
 
             this.scene.sounds.vsGameFinish.play();
 
@@ -191,7 +175,7 @@ module.exports = class Level  {
             const tileIndex = utils.rand(0, bricksTiles.length - 1);
             const tile = bricksTiles[tileIndex];
             tile.setData('contains-bonus', 'bonus-bomb-power');
-            bricksTiles = _.without(bricksTiles, tile);
+            bricksTiles = bricksTiles.filter(t => t !== tile);
         }
 
         // put bomb count bonuses
@@ -199,7 +183,7 @@ module.exports = class Level  {
             const tileIndex = utils.rand(0, bricksTiles.length - 1);
             const tile = bricksTiles[tileIndex];
             tile.setData('contains-bonus', 'bonus-bomb-count');
-            bricksTiles = _.without(bricksTiles, tile);
+            bricksTiles = bricksTiles.filter(t => t !== tile);
         }
         
     }
